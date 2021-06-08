@@ -18,32 +18,32 @@ package cmd
 import (
 //    "fmt"
 
-	"github.com/spf13/cobra"
+    "github.com/spf13/cobra"
 
     "gitlab.com/zwischenloesung/natem/kb"
 )
 
 // nodeCmd represents the node command
 var nodeCmd = &cobra.Command{
-	Use:   "node",
-	Short: "Tode View",
-	Long: `A visualization of the information stored. The focus here lies
+    Use:   "node",
+    Short: "Tode View",
+    Long: `A visualization of the information stored. The focus here lies
 on the node and its parameters.`,
-	Run: func(cmd *cobra.Command, args []string) {
+    Run: func(cmd *cobra.Command, args []string) {
         kb.Node()
-	},
+    },
 }
 
 func init() {
-	rootCmd.AddCommand(nodeCmd)
+    rootCmd.AddCommand(nodeCmd)
 
-	// Here you will define your flags and configuration settings.
+    // Here you will define your flags and configuration settings.
 
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// nodeCmd.PersistentFlags().String("foo", "", "A help for foo")
+    // Cobra supports Persistent Flags which will work for this command
+    // and all subcommands, e.g.:
+    // nodeCmd.PersistentFlags().String("foo", "", "A help for foo")
 
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// nodeCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+    // Cobra supports local flags which will only run when this command
+    // is called directly, e.g.:
+    // nodeCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
