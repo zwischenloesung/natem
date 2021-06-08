@@ -16,9 +16,11 @@ limitations under the License.
 package cmd
 
 import (
-	"fmt"
+//    "fmt"
 
 	"github.com/spf13/cobra"
+
+    "gitlab.com/zwischenloesung/natem/kb"
 )
 
 // nodeCmd represents the node command
@@ -28,7 +30,7 @@ var nodeCmd = &cobra.Command{
 	Long: `A visualization of the information stored. The focus here lies
 on the node and its parameters.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("node called")
+        kb.Node()
 	},
 }
 
