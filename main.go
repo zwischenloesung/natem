@@ -16,5 +16,5 @@ package main
 import "gitlab.com/zwischenloesung/natem/cmd"
 
 func main() {
-    cmd.Execute()
+	cmd.Execute()
 }
