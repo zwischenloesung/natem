@@ -1,47 +1,44 @@
 /*
-Copyright © 2021 NAME HERE <EMAIL ADDRESS>
+This is Free Software; feel free to redistribute and/or modify it
+under the terms of the GNU General Public License as published by
+the Free Software Foundation; version 3 of the License.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
 
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+Copyright © 2021 Michael Lustenberger <mic@inofix.ch>
 */
 package cmd
 
 import (
-    "fmt"
+	"fmt"
 
-    "github.com/spf13/cobra"
+	"github.com/spf13/cobra"
 )
 
 // treeCmd represents the tree command
 var treeCmd = &cobra.Command{
-    Use:   "tree",
-    Short: "Tree View",
-    Long: `A visualization of the information stored. The focus here lies
+	Use:   "tree",
+	Short: "Tree View",
+	Long: `A visualization of the information stored. The focus here lies
 on the 'is' realation, i.e. the categories.`,
-    Run: func(cmd *cobra.Command, args []string) {
-        fmt.Println("tree called")
-    },
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("tree called")
+	},
 }
 
 func init() {
-    rootCmd.AddCommand(treeCmd)
+	rootCmd.AddCommand(treeCmd)
 
-    // Here you will define your flags and configuration settings.
+	// Here you will define your flags and configuration settings.
 
-    // Cobra supports Persistent Flags which will work for this command
-    // and all subcommands, e.g.:
-    // treeCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// Cobra supports Persistent Flags which will work for this command
+	// and all subcommands, e.g.:
+	// treeCmd.PersistentFlags().String("foo", "", "A help for foo")
 
-    // Cobra supports local flags which will only run when this command
-    // is called directly, e.g.:
-    // treeCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// Cobra supports local flags which will only run when this command
+	// is called directly, e.g.:
+	// treeCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
