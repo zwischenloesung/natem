@@ -15,8 +15,6 @@ package kb
 import (
 	"fmt"
 	"net/url"
-	"os"
-	"os/exec"
 )
 
 type Thing struct {
@@ -45,19 +43,6 @@ type Thing struct {
 
 func ShowActions(project string, thing string, behavior string) {
 	fmt.Println("kb.ShowActions(", project, ",", thing, ",", behavior, ") called")
-
-	//TODO test for url or combine with project
-
-	cmd := exec.Command("vim", thing)
-	cmd.Stdin = os.Stdin
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-
-	err := cmd.Run()
-
-	if err != nil {
-		fmt.Println("an error occurred.\n", err)
-	}
 }
 
 func ShowBehavior(project string, thing string) {
