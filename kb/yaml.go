@@ -43,29 +43,29 @@ type Thing struct {
 }
 
 func ParseURL(u string) (*url.URL, error) {
-	URL, error := url.Parse(u)
-	if error != nil {
-		log.Fatal("An error occurs while parsing the URL", error)
+	URL, err := url.Parse(u)
+	if err != nil {
+		log.Fatal("An error occurs while parsing the URL", err)
 	}
-	return URL, error
+	return URL, err
 }
 
 func ParseFileURL(u string) (*url.URL, error) {
-	URL, error := ParseURL(u)
+	URL, err := ParseURL(u)
 	// Only consider URLs pointing to the local file system, allow for
 	// absolute or relative paths too.
 	if URL.Scheme == "file" || URL.Scheme == "" {
 		return URL, nil
 	} else {
-		log.Fatal("This URL was not of scheme 'file:///' as expected", error)
-		return URL, error
+		log.Fatal("This URL was not of scheme 'file:///' as expected", err)
+		return URL, err
 	}
 }
 
 // Just get the path of the file back
 func GetFilePathFromURL(u string) (string, error) {
-	URL, error := ParseFileURL(u)
-	return URL.Path, error
+	URL, err := ParseFileURL(u)
+	return URL.Path, err
 }
 
 func ShowActions(project string, thing string, behavior string) {
