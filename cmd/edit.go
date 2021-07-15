@@ -18,18 +18,19 @@ import (
 	"os/exec"
 
 	"github.com/spf13/cobra"
+	"gitlab.com/zwischenloesung/natem/kb"
 )
 
 func EditThing(project string, thing string, editor string) {
 	fmt.Println("EditThing(", project, ",", thing, ",", editor, "", ") called")
 
-	//TODO test for url or combine with project
+	file, _ := kb.GetFilePathFromURL(thing)
 
 	if editor == "" {
 		editor, _ = os.LookupEnv("EDITOR")
 	}
 
-	cmd := exec.Command(editor, thing)
+	cmd := exec.Command(editor, file)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr

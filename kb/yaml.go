@@ -14,6 +14,7 @@ package kb
 
 import (
 	"fmt"
+	"log"
 	"net/url"
 )
 
@@ -39,6 +40,32 @@ type Thing struct {
 		name string
 		uri  []url.URL
 	}
+}
+
+func ParseURL(u string) (*url.URL, error) {
+	URL, error := url.Parse(u)
+	if error != nil {
+		log.Fatal("An error occurs while parsing the URL", error)
+	}
+	return URL, error
+}
+
+func ParseFileURL(u string) (*url.URL, error) {
+	URL, error := ParseURL(u)
+	// Only consider URLs pointing to the local file system, allow for
+	// absolute or relative paths too.
+	if URL.Scheme == "file" || URL.Scheme == "" {
+		return URL, nil
+	} else {
+		log.Fatal("This URL was not of scheme 'file:///' as expected", error)
+		return URL, error
+	}
+}
+
+// Just get the path of the file back
+func GetFilePathFromURL(u string) (string, error) {
+	URL, error := ParseFileURL(u)
+	return URL.Path, error
 }
 
 func ShowActions(project string, thing string, behavior string) {
