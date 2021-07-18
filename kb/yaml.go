@@ -34,15 +34,15 @@ type Thing struct {
 	Type         struct {
 		Name    string `yaml:"name"`
 		Version string `yaml:"version"`
-		//		Schema  url.URL `yaml:"schema"`
+		//		Schema  URI `yaml:"schema"`
 	} `yaml:"_type"`
 	Authors []struct {
-		Name string    `yaml:"name"`
-		Uri  []url.URL `yaml:"uri"`
+		Name string `yaml:"name"`
+		Uri  string `yaml:"uri"`
 	} `yaml:"_authors"`
 	References []struct {
-		Name string    `yaml:"name"`
-		Uri  []url.URL `yaml:"uri"`
+		Name string `yaml:"name"`
+		Uri  string `yaml:"uri"`
 	} `yaml:"_references"`
 }
 
