@@ -24,19 +24,23 @@ import (
 
 var cfgFile string
 
-// rootCmd represents the base command when called without any subcommands
-var rootCmd = &cobra.Command{
-	Use:   "natem",
-	Short: "Natem helps organizing information in a knowledge base system",
-	Long: `Natem allows you to access and edit your knowledge, stored in
+// NewRootCmd represents the base command when called without any subcommands
+func NewRootCmd() *cobra.Command {
+	return &cobra.Command{
+		Use:   "natem",
+		Short: "Natem helps organizing information in a knowledge base system",
+		Long: `Natem allows you to access and edit your knowledge, stored in
 (e.g. different, distributed) repositories by combining that content based
 on it's config file into a mighty source of information and presenting it
 using specific views, depending on your current focus.`,
 
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	//    Run: func(cmd *cobra.Command, args []string) { },
+		// Uncomment the following line if your bare application
+		// has an action associated with it:
+		//    Run: func(cmd *cobra.Command, args []string) { },
+	}
 }
+
+var rootCmd = NewRootCmd()
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
