@@ -17,23 +17,28 @@ import (
 	"bytes"
 	"io/ioutil"
 	"testing"
+
+	"github.com/spf13/cobra"
 )
+
+func init() {
+	cobra.OnInitialize(initConfig)
+}
 
 // Test the basics...
 func TestExecuteHelp(t *testing.T) {
-	cmd := NewRootCmd()
 	a := bytes.NewBufferString("")
 	b := bytes.NewBufferString("")
-	cmd.SetOut(a)
-	cmd.SetArgs([]string{"help"})
-	cmd.Execute()
+	rootCmd.SetOut(a)
+	rootCmd.SetArgs([]string{"help"})
+	rootCmd.Execute()
 	aOut, err := ioutil.ReadAll(a)
 	if err != nil {
 		t.Fatal(err)
 	}
-	cmd.SetOut(b)
-	cmd.SetArgs([]string{"--help"})
-	cmd.Execute()
+	rootCmd.SetOut(b)
+	rootCmd.SetArgs([]string{"--help"})
+	rootCmd.Execute()
 	bOut, err := ioutil.ReadAll(b)
 	if err != nil {
 		t.Fatal(err)
@@ -41,4 +46,15 @@ func TestExecuteHelp(t *testing.T) {
 	if string(aOut) != string(bOut) {
 		t.Fatalf("expected the same output for `help` and `--help`, but got ...\n\"%s\"\n ... and ... \n\"%s\"", string(aOut), string(bOut))
 	}
+}
+
+// Test if all expected options are there
+func TestExecuteOptions(t *testing.T) {
+	// TODO
+	a := bytes.NewBufferString("")
+	rootCmd.SetOut(a)
+	rootCmd.SetArgs([]string{"--config", "test.conf"})
+	rootCmd.Execute()
+	rootCmd.SetArgs([]string{"--project", "/tmp/foo"})
+	rootCmd.Execute()
 }

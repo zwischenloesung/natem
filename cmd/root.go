@@ -24,8 +24,7 @@ import (
 
 var cfgFile string
 
-// NewRootCmd represents the base command when called without any subcommands
-func NewRootCmd() *cobra.Command {
+func RootCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "natem",
 		Short: "Natem helps organizing information in a knowledge base system",
@@ -40,7 +39,8 @@ using specific views, depending on your current focus.`,
 	}
 }
 
-var rootCmd = NewRootCmd()
+// rootCmd represents the base command when called without any subcommands
+var rootCmd = RootCmd()
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
