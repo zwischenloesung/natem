@@ -51,10 +51,8 @@ func TestExecuteHelp(t *testing.T) {
 // Test if all expected options are there
 func TestExecuteOptions(t *testing.T) {
 	// TODO
-	a := bytes.NewBufferString("")
-	rootCmd.SetOut(a)
 	rootCmd.SetArgs([]string{"--config", "test.conf"})
-	rootCmd.Execute()
+	cobra.CheckErr(rootCmd.Execute())
 	rootCmd.SetArgs([]string{"--project", "/tmp/foo"})
-	rootCmd.Execute()
+	cobra.CheckErr(rootCmd.Execute())
 }
