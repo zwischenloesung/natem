@@ -72,24 +72,24 @@ func GetFilePathFromURL(u string) (string, error) {
 	return URL.Path, err
 }
 
-//func ParseThing(thing string) Thing {
+func ParseThing(yamlContent []byte) Thing {
 
-//	err := yaml.Unmarshal(
-//}
+	var thing Thing
+	err := yaml.Unmarshal(yamlContent, &thing)
+	if err != nil {
+		log.Fatal("Error parsing JSON/YAML from file.\n", err)
+	}
+	return thing
+}
 
 func ParseThingFromFile(file string) Thing {
 
-	yamlFile, err := ioutil.ReadFile(file)
+	yamlContent, err := ioutil.ReadFile(file)
 	if err != nil {
 		log.Fatal("Error reading JSON/YAML file.\n", err)
 	}
 
-	var t Thing
-	err = yaml.Unmarshal(yamlFile, &t)
-	if err != nil {
-		log.Fatal("Error parsing JSON/YAML from file.\n", err)
-	}
-	return t
+	return ParseThing(yamlContent)
 }
 
 func ShowActions(project string, thing string, behavior string) {
