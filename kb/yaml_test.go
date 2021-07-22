@@ -25,3 +25,13 @@ func TestThing(t *testing.T) {
 		t.Fatal("foo")
 	}
 }
+
+func TestParseThing(t *testing.T) {
+
+	a := "---\n_name: 'foo'\n"
+	b := []byte(a)
+	c := ParseThing(b)
+	if c.Name != "foo" {
+		t.Fatal("foo")
+	}
+}
