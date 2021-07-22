@@ -43,8 +43,8 @@ func TestParseFileURL(t *testing.T) {
 }
 
 func TestGetFilePathFromURL(t *testing.T) {
-	a, e := GetFilePathFromURL("tessting/example.yml")
-	if e != nil && a == "testing/example.yml" {
-		t.Fatal("parsing the URI (file) did no work as expected")
+	a, e := GetFilePathFromURL("testing/example.yml")
+	if e != nil || a != "testing/example.yml" {
+		t.Fatalf("parsing the URI (file) did no work as expected, result is: %s", a)
 	}
 }
