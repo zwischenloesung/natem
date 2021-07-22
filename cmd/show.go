@@ -13,7 +13,7 @@ Copyright © 2021 Michael Lustenberger <mic@inofix.ch>
 package cmd
 
 import (
-	//    "fmt"
+	"fmt"
 
 	"github.com/spf13/cobra"
 	"gitlab.com/zwischenloesung/natem/kb"
@@ -38,19 +38,19 @@ The focus here lies on the content and behaviour of the things.`,
 		rel_beh, _ := cmd.PersistentFlags().GetString("relations")
 
 		if beh {
-			kb.ShowBehavior(project, thing)
+			ShowBehavior(project, thing)
 		}
 		if cat {
-			kb.ShowCategories(project, thing)
+			ShowCategories(project, thing)
 		}
 		if act_beh != "" {
-			kb.ShowActions(project, thing, act_beh)
+			ShowActions(project, thing, act_beh)
 		}
 		if rel_beh != "" {
-			kb.ShowRelations(project, thing, rel_beh)
+			ShowRelations(project, thing, rel_beh)
 		}
 		if !beh && !cat && act_beh == "" && rel_beh == "" {
-			kb.ShowParameters(project, thing)
+			ShowParameters(project, thing)
 		}
 	},
 }
@@ -75,4 +75,26 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// showCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+}
+
+func ShowActions(project string, thing string, behavior string) {
+	fmt.Println("kb.ShowActions(", project, ",", thing, ",", behavior, ") called")
+}
+
+func ShowBehavior(project string, thing string) {
+	fmt.Println("kb.ShowBehavior(", project, ",", thing, ") called")
+}
+
+func ShowCategories(project string, thing string) {
+	fmt.Println("kb.ShowCategories(", project, ",", thing, ") called")
+}
+
+func ShowParameters(project string, thing string) {
+	fmt.Println("kb.ShowParameters(", project, ",", thing, ") called")
+	theThing := kb.ParseThingFromFile(thing)
+	fmt.Println(theThing)
+}
+
+func ShowRelations(project string, thing string, behavior string) {
+	fmt.Println("kb.ShowRelations(", project, ",", thing, ",", behavior, ") called")
 }
