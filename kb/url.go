@@ -18,19 +18,18 @@ import (
 )
 
 type URL struct {
-	Whole string
-	Items url.URL
+	*url.URL
 }
 
-func ParseURL(u string) (*url.URL, error) {
-	URL, err := url.Parse(u)
+func ParseURL(u string) (*URL, error) {
+	url, err := url.Parse(u)
 	if err != nil {
 		log.Fatal("An error occurs while parsing the URL.\n", err)
 	}
-	return URL, err
+	return &URL{url}, err
 }
 
-func ParseFileURL(u string) (*url.URL, error) {
+func ParseFileURL(u string) (*URL, error) {
 	URL, err := ParseURL(u)
 	// Only consider URLs pointing to the local file system, allow for
 	// absolute or relative paths too.
