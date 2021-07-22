@@ -13,7 +13,6 @@ Copyright © 2021 Michael Lustenberger <mic@inofix.ch>
 package kb
 
 import (
-	"fmt"
 	"log"
 	"net/url"
 )
@@ -21,12 +20,6 @@ import (
 type URL struct {
 	Whole string
 	Items url.URL
-}
-
-func (u *URL) UnmarshalYAML(unmarshal func(interface{}) error) error {
-
-	fmt.Println("hi")
-	return nil
 }
 
 func ParseURL(u string) (*url.URL, error) {
