@@ -14,18 +14,17 @@ Copyright © 2021 Michael Lustenberger <mic@inofix.ch>
 package kb
 
 import (
-	"net/url"
 	"testing"
 )
 
 func TestParseURL(t *testing.T) {
 	a := "urn:uuid:00000000-0000-0000-0000-000000000000"
-	_, e := url.Parse(a)
+	_, e := ParseURL(a)
 	if e != nil {
 		t.Fatal("parsing the URI (urn) did no work as expected")
 	}
 	a = "https://example.org"
-	_, e = url.Parse(a)
+	_, e = ParseURL(a)
 	if e != nil {
 		t.Fatal("parsing the URI (https) did no work as expected")
 	}
