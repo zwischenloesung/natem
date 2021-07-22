@@ -22,16 +22,24 @@ func TestThing(t *testing.T) {
 	var thing Thing
 	thing.Name = "foo"
 	if thing.Name != "foo" {
-		t.Fatal("foo")
+		t.Fatal("the struct Thing does not work as expected")
 	}
 }
 
 func TestParseThing(t *testing.T) {
 
-	a := "---\n_name: 'foo'\n"
+	a := "---\n_name: 'example'\n"
 	b := []byte(a)
 	c := ParseThing(b)
-	if c.Name != "foo" {
-		t.Fatal("foo")
+	if c.Name != "example" {
+		t.Fatal("the YAML parser does not work as expected")
+	}
+}
+
+func TestParseThingFromtFile(t *testing.T) {
+
+	a := ParseThingFromFile("testing/example.yml")
+	if a.Name != "example" {
+		t.Fatal("parsing YAML from file does not work as expected")
 	}
 }
