@@ -19,14 +19,20 @@ import (
 
 func TestParseURL(t *testing.T) {
 	a := "urn:uuid:00000000-0000-0000-0000-000000000000"
-	_, e := ParseURL(a)
+	b, e := ParseURL(a)
 	if e != nil {
 		t.Fatal("parsing the URI (urn) did no work as expected")
 	}
+	if b.Scheme != "urn" {
+		t.Fatal("setting the 'Scheme' value did no work as expected while parsing the URI (urn)")
+	}
 	a = "https://example.org"
-	_, e = ParseURL(a)
+	b, e = ParseURL(a)
 	if e != nil {
 		t.Fatal("parsing the URI (https) did no work as expected")
+	}
+	if b.Host != "example.org" {
+		t.Fatal("setting the 'Host' value did no work as expected while parsing the URI (https)")
 	}
 }
 
