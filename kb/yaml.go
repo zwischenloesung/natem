@@ -20,27 +20,27 @@ import (
 )
 
 type Thing struct {
-	Targets      []string `yaml:"targets"`
+	Targets      []string `yaml:"targets"` // URI:Link
 	Behavior     struct{} `yaml:"behaviour"`
 	Content      struct{} `yaml:"content"`
-	Id           string   `yaml:"_id"`
+	Id           string   `yaml:"_id"` // URI:UUID
 	Alias        []string `yaml:"_alias"`
-	Name         string   `yaml:"_name"`
-	Urls         []string `yaml:"_urls"`
-	Version      string   `yaml:"_version"`
-	Dependencies []string `yaml:"_dependencies"`
+	Name         string   `yaml:"_name"`         // URI:... (locally unique as path is added?)
+	Urls         []string `yaml:"_urls"`         // URI:Link
+	Version      string   `yaml:"_version"`      // URI tag would be nice!
+	Dependencies []string `yaml:"_dependencies"` // URI:Link
 	Type         struct {
-		Name    string `yaml:"name"`
-		Version string `yaml:"version"`
-		//		Schema  URI `yaml:"schema"`
+		Name    string `yaml:"name"`    // URI:tag?
+		Version string `yaml:"version"` // URI:tag would be nice!
+		//		Schema  URI `yaml:"schema"` (auto-calculated)
 	} `yaml:"_type"`
 	Authors []struct {
 		Name string `yaml:"name"`
-		Uri  string `yaml:"uri"`
+		Uri  string `yaml:"uri"` // URI:Address
 	} `yaml:"_authors"`
 	References []struct {
 		Name string `yaml:"name"`
-		Uri  string `yaml:"uri"`
+		Uri  string `yaml:"uri"` // URI:Address
 	} `yaml:"_references"`
 }
 
