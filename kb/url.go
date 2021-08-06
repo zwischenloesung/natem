@@ -17,32 +17,38 @@ import (
 	"net/url"
 )
 
-type URL struct {
+type URI struct {
 	*url.URL
 }
 
-func ParseURL(u string) (*URL, error) {
-	url, err := url.Parse(u)
-	if err != nil {
-		log.Fatal("An error occurs while parsing the URL.\n", err)
-	}
-	return &URL{url}, err
+type Link struct {
+	URI
 }
 
-func ParseFileURL(u string) (*URL, error) {
-	URL, err := ParseURL(u)
+var SupportedLinkSchemes = []string{"file", "http", "https"}
+
+func ParseURI(u string) (*URI, error) {
+	uri, err := url.Parse(u)
+	if err != nil {
+		log.Fatal("An error occurs while parsing the URI.\n", err)
+	}
+	return &URI{uri}, err
+}
+
+func ParseFileURL(u string) (*URI, error) {
+	uri, err := ParseURI(u)
 	// Only consider URLs pointing to the local file system, allow for
 	// absolute or relative paths too.
-	if URL.Scheme == "file" || URL.Scheme == "" {
-		return URL, nil
+	if uri.Scheme == "file" || uri.Scheme == "" {
+		return uri, nil
 	} else {
 		log.Fatal("This URL was not of scheme 'file:///' as expected.\n", err)
-		return URL, err
+		return uri, err
 	}
 }
 
 // Just get the path of the file back
 func GetFilePathFromURL(u string) (string, error) {
-	URL, err := ParseFileURL(u)
-	return URL.Path, err
+	uri, err := ParseFileURL(u)
+	return uri.Path, err
 }
