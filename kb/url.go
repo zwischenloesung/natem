@@ -30,7 +30,7 @@ var SupportedLinkSchemes = []string{"file", "http", "https"}
 func ParseURI(u string) (*URI, error) {
 	uri, err := url.Parse(u)
 	if err != nil {
-		log.Fatal("An error occurs while parsing the URI.\n", err)
+		log.Fatal("An error occured while parsing the URI.\n", err)
 	}
 	return &URI{uri}, err
 }
