@@ -35,15 +35,19 @@ func ParseURI(u string) (*URI, error) {
 	return &URI{uri}, err
 }
 
-func ParseFileURL(u string) (*URI, error) {
+func ParseFileURL(u string) (*Link, error) {
 	uri, err := ParseURI(u)
 	// Only consider URLs pointing to the local file system, allow for
 	// absolute or relative paths too.
 	if uri.Scheme == "file" || uri.Scheme == "" {
-		return uri, nil
+		uri.Scheme = "file"
+		if uri.Path[0] != byte('/') {
+			//TODO find the top pwd
+		}
+		return &Link{*uri}, nil
 	} else {
 		log.Fatal("This URL was not of scheme 'file:///' as expected.\n", err)
-		return uri, err
+		return &Link{*uri}, err
 	}
 }
 
