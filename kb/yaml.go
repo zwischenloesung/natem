@@ -47,7 +47,7 @@ type Thing struct {
 
 var ThingSchemaDefault = []string{"https://github.com/zwischenloesung/tsunki/blob/master/schema/tsunki_thing_schema-latest.yml"}
 
-func ValidateThing(schemaBytes []byte, contentBytes []byte) bool {
+func ValidateJSONThing(schemaBytes []byte, contentBytes []byte) bool {
 	schemaLoader := gojsonschema.NewStringLoader(string(schemaBytes))
 	contentLoader := gojsonschema.NewStringLoader(string(contentBytes))
 

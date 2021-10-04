@@ -32,13 +32,13 @@ func TestValidateThing(t *testing.T) {
 	data := []byte(d)
 	s := "{ \"type\": \"object\", \"properties\": { \"_version\": { \"type\": \"string\" } } }"
 	sc := []byte(s)
-	if !ValidateThing(sc, data) {
+	if !ValidateJSONThing(sc, data) {
 		t.Fatal("this should have validated successfully...")
 	}
 	s = "{ \"type\": \"object\", \"properties\": { \"_version\": { \"type\": \"array\" } } }"
 	sc = []byte(s)
 	t.Log("Now failing successfully:")
-	if ValidateThing(sc, data) {
+	if ValidateJSONThing(sc, data) {
 		t.Fatal("this should not have validated...")
 	}
 }
