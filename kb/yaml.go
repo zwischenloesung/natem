@@ -16,33 +16,33 @@ import (
 	"io/ioutil"
 	"log"
 
+	"github.com/ghodss/yaml"
 	"github.com/xeipuuv/gojsonschema"
-	"gopkg.in/yaml.v2"
 )
 
 type Thing struct {
-	Targets      []string `yaml:"targets"` // URI:Link
-	Behavior     struct{} `yaml:"behaviour"`
-	Content      struct{} `yaml:"content"`
-	Id           string   `yaml:"_id"` // URI:UUID
-	Alias        []string `yaml:"_alias"`
-	Name         string   `yaml:"_name"`         // URI:... (locally unique as path is added?)
-	Urls         []string `yaml:"_urls"`         // URI:Link
-	Version      string   `yaml:"_version"`      // URI tag would be nice!
-	Dependencies []string `yaml:"_dependencies"` // URI:Link
+	Targets      []string `json:"targets"` // URI:Link
+	Behavior     struct{} `json:"behaviour"`
+	Content      struct{} `json:"content"`
+	Id           string   `json:"_id"` // URI:UUID
+	Alias        []string `json:"_alias"`
+	Name         string   `json:"_name"`         // URI:... (locally unique as path is added?)
+	Urls         []string `json:"_urls"`         // URI:Link
+	Version      string   `json:"_version"`      // URI tag would be nice!
+	Dependencies []string `json:"_dependencies"` // URI:Link
 	Type         struct {
-		Name    string `yaml:"name"`    // URI:tag?
-		Version string `yaml:"version"` // URI:tag would be nice!
-		//		Schema  URI `yaml:"schema"` (auto-calculated)
-	} `yaml:"_type"`
+		Name    string `json:"name"`    // URI:tag?
+		Version string `json:"version"` // URI:tag would be nice!
+		//		Schema  URI `json:"schema"` (auto-calculated)
+	} `json:"_type"`
 	Authors []struct {
-		Name string `yaml:"name"`
-		Uri  string `yaml:"uri"` // URI:Address
-	} `yaml:"_authors"`
+		Name string `json:"name"`
+		Uri  string `json:"uri"` // URI:Address
+	} `json:"_authors"`
 	References []struct {
-		Name string `yaml:"name"`
-		Uri  string `yaml:"uri"` // URI:Address
-	} `yaml:"_references"`
+		Name string `json:"name"`
+		Uri  string `json:"uri"` // URI:Address
+	} `json:"_references"`
 }
 
 var ThingSchemaDefault = []string{"https://github.com/zwischenloesung/tsunki/blob/master/schema/tsunki_thing_schema-latest.yml"}
@@ -67,6 +67,22 @@ func ValidateJSONThing(schemaBytes []byte, contentBytes []byte) bool {
 		}
 		return false
 	}
+}
+
+// We do only accept JSON compatible YAML anyway. TSENTSAK-YAML is defined to
+// be an object/map and has only strings as keys.
+func ValidateYAMLThing(schemaBytes []byte, contentBytes []byte) bool {
+
+	JSONSchemaBytes, err := yaml.YAMLToJSON(schemaBytes)
+	if err != nil {
+		log.Fatal("Parsing the YAML schema failed:", err)
+	}
+	JSONContentBytes, err := yaml.YAMLToJSON(contentBytes)
+	if err != nil {
+		log.Fatal("Parsing the YAML document failed:", err)
+	}
+
+	return ValidateJSONThing(JSONSchemaBytes, JSONContentBytes)
 }
 
 func ParseThing(yamlContent []byte) Thing {

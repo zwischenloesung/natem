@@ -41,6 +41,13 @@ func TestValidateThing(t *testing.T) {
 	if ValidateJSONThing(sc, data) {
 		t.Fatal("this should not have validated...")
 	}
+	d = "---\n_version: \"0.1\""
+	data = []byte(d)
+	s = "---\ntype: \"object\"\nproperties:\n  _version:\n    type: \"string\""
+	sc = []byte(s)
+	if !ValidateYAMLThing(sc, data) {
+		t.Fatal("this should not have validated...")
+	}
 }
 
 func TestParseThing(t *testing.T) {
