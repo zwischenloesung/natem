@@ -30,15 +30,15 @@ func TestValidateThing(t *testing.T) {
 
 	d := "{ \"_version\": \"0.1\" }"
 	data := []byte(d)
-	s0 := "{ \"type\": \"object\", \"properties\": { \"_version\": { \"type\": \"string\" } } }"
-	s1 := "{ \"type\": \"object\", \"properties\": { \"_version\": { \"type\": \"array\" } } }"
-	sc0 := []byte(s0)
-	sc1 := []byte(s1)
-	if !ValidateThing(sc0, data) {
+	s := "{ \"type\": \"object\", \"properties\": { \"_version\": { \"type\": \"string\" } } }"
+	sc := []byte(s)
+	if !ValidateThing(sc, data) {
 		t.Fatal("this should have validated successfully...")
 	}
-	t.Log("Failing successfully:")
-	if ValidateThing(sc1, data) {
+	s = "{ \"type\": \"object\", \"properties\": { \"_version\": { \"type\": \"array\" } } }"
+	sc = []byte(s)
+	t.Log("Now failing successfully:")
+	if ValidateThing(sc, data) {
 		t.Fatal("this should not have validated...")
 	}
 }
