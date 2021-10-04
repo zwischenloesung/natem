@@ -1,0 +1,76 @@
+%YAML 1.2
+---
+$schema: "http://json-schema.org/draft-07/schema#"
+$id: "https://gitlab.com/zwischenloesung/tsunki/-/raw/master/schema/tsunki_thing_schema-0.1.yml?inline=false"
+
+title: "Tsunki Thing Schema"
+description: |
+    Anything mapped in the Tsunki knowledge-base-system is a
+    Tsunki Thing. This schema is the most generic schema any Tsunki
+    Thing follows.
+
+type: "object"
+
+properties:
+  targets:
+    type: [ "array", "null" ]
+  id:
+    type: "string"
+  alias:
+    type: [ "array", "null" ]
+    items:
+      type: "string"
+  urls:
+    type: [ "array", "null" ]
+    items:
+      type: "string"
+  relation:
+    type: "object"
+    patternProperties:
+      .*:
+        type: [ "array", "null" ]
+        items:
+          type: "string"
+  module:
+    type: [ "array", "null" ]
+    items:
+      name:
+        type: "string"
+      url:
+        type: "string"
+  property:
+    type: "object"
+  _type:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      version:
+        type: "string"
+      schema:
+        type: "string"
+  _version:
+    type: [ "string", "null" ]
+  _dependencies:
+    type: [ "array", "null" ]
+    items:
+      type: "string"
+  _authors:
+    type: "array"
+    items:
+      name:
+        type: "string"
+      uri:
+        type: "string"
+  _references:
+    type: "array"
+    items:
+      name:
+        type: "string"
+      uri:
+        type: "string"
+
+requried:
+  - "id"
+  - "targets"
+

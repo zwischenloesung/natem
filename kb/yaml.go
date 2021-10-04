@@ -16,6 +16,7 @@ import (
 	"io/ioutil"
 	"log"
 
+	"github.com/xeipuuv/gojsonschema"
 	"gopkg.in/yaml.v2"
 )
 
@@ -44,6 +45,30 @@ type Thing struct {
 	} `yaml:"_references"`
 }
 
+var ThingSchemaDefault = []string{"https://github.com/zwischenloesung/tsunki/blob/master/schema/tsunki_thing_schema-latest.yml"}
+
+func ValidateThing(schemaBytes []byte, contentBytes []byte) bool {
+	schemaLoader := gojsonschema.NewStringLoader(string(schemaBytes))
+	contentLoader := gojsonschema.NewStringLoader(string(contentBytes))
+
+	result, err := gojsonschema.Validate(schemaLoader, contentLoader)
+	if err != nil {
+		log.Fatal("Error validating the document:\n", err)
+		return false
+	}
+
+	if result.Valid() {
+		return true
+	} else {
+		log.Print("Invalid document:\n")
+		for _, e := range result.Errors() {
+			//			fmt.Printf("- %s\n", err)
+			log.Printf("- %s\n", e)
+		}
+		return false
+	}
+}
+
 func ParseThing(yamlContent []byte) Thing {
 
 	var thing Thing
@@ -54,9 +79,9 @@ func ParseThing(yamlContent []byte) Thing {
 	return thing
 }
 
-func ParseThingFromFile(file string) Thing {
+func ParseThingFromFile(fileName string) Thing {
 
-	yamlContent, err := ioutil.ReadFile(file)
+	yamlContent, err := ioutil.ReadFile(fileName)
 	if err != nil {
 		log.Fatal("Error reading JSON/YAML file.\n", err)
 	}

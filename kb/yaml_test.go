@@ -26,6 +26,23 @@ func TestThing(t *testing.T) {
 	}
 }
 
+func TestValidateThing(t *testing.T) {
+
+	d := "{ \"_version\": \"0.1\" }"
+	data := []byte(d)
+	s0 := "{ \"type\": \"object\", \"properties\": { \"_version\": { \"type\": \"string\" } } }"
+	s1 := "{ \"type\": \"object\", \"properties\": { \"_version\": { \"type\": \"array\" } } }"
+	sc0 := []byte(s0)
+	sc1 := []byte(s1)
+	if !ValidateThing(sc0, data) {
+		t.Fatal("this should have validated successfully...")
+	}
+	t.Log("Failing successfully:")
+	if ValidateThing(sc1, data) {
+		t.Fatal("this should not have validated...")
+	}
+}
+
 func TestParseThing(t *testing.T) {
 
 	a := "---\n_name: 'example'\n"
