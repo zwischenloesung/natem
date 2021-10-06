@@ -28,10 +28,13 @@ Validate the thing provided against a schema definition and report back
 to the user.`,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		project, _ := rootCmd.PersistentFlags().GetString("project")
+		viper.BindPFlag("project", rootCmd.PersistentFlags().Lookup("project"))
+		project := viper.GetString("project")
 
-		thing, _ := cmd.PersistentFlags().GetString("thing")
+		viper.BindPFlag("thing", cmd.PersistentFlags().Lookup("thing"))
+		thing := viper.GetString("thing")
 
+		viper.BindPFlag("schema", cmd.PersistentFlags().Lookup("schema"))
 		schema := viper.GetString("schema")
 
 		ValidateThing(project, thing, schema)
@@ -49,9 +52,7 @@ func init() {
 
 	validateCmd.PersistentFlags().StringP("thing", "t", "", "the thing to be validated, either in URL or short form")
 	validateCmd.MarkPersistentFlagRequired("thing")
-	viper.BindPFlag("thing", validateCmd.PersistentFlags().Lookup("thing"))
 	validateCmd.PersistentFlags().StringP("schema", "s", "", "the schema to use for validation against, either in URL or short form")
-	viper.BindPFlag("schema", validateCmd.PersistentFlags().Lookup("schema"))
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
