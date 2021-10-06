@@ -45,8 +45,6 @@ type Thing struct {
 	} `json:"_references"`
 }
 
-var ThingSchemaDefault = []string{"https://github.com/zwischenloesung/tsunki/blob/master/schema/tsunki_thing_schema-latest.yml"}
-
 func ValidateJSONThing(schemaBytes []byte, contentBytes []byte) bool {
 	schemaLoader := gojsonschema.NewStringLoader(string(schemaBytes))
 	contentLoader := gojsonschema.NewStringLoader(string(contentBytes))
