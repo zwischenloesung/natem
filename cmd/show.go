@@ -16,6 +16,7 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 	"gitlab.com/zwischenloesung/natem/kb"
 )
 
@@ -27,15 +28,23 @@ var showCmd = &cobra.Command{
 The focus here lies on the content and behaviour of the things.`,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		project, _ := rootCmd.PersistentFlags().GetString("project")
+		viper.BindPFlag("project", rootCmd.PersistentFlags().Lookup("project"))
+		project := viper.GetString("project")
 
-		thing, _ := cmd.PersistentFlags().GetString("thing")
+		viper.BindPFlag("thing", cmd.PersistentFlags().Lookup("thing"))
+		thing := viper.GetString("thing")
 
-		//default: param, _ := cmd.PersistentFlags().GetBool("parameters")
-		act_beh, _ := cmd.PersistentFlags().GetString("actions")
-		beh, _ := cmd.PersistentFlags().GetBool("behavior")
-		cat, _ := cmd.PersistentFlags().GetBool("categories")
-		rel_beh, _ := cmd.PersistentFlags().GetString("relations")
+		viper.BindPFlag("actions", cmd.PersistentFlags().Lookup("actions"))
+		act_beh := viper.GetString("actions")
+
+		viper.BindPFlag("behavior", cmd.PersistentFlags().Lookup("behavior"))
+		beh := viper.GetBool("behavior")
+
+		viper.BindPFlag("categories", cmd.PersistentFlags().Lookup("categories"))
+		cat := viper.GetBool("categories")
+
+		viper.BindPFlag("relations", cmd.PersistentFlags().Lookup("relations"))
+		rel_beh := viper.GetString("relations")
 
 		if beh {
 			ShowBehavior(project, thing)
