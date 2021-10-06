@@ -17,7 +17,7 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"gitlab.com/zwischenloesung/natem/kb"
+	"gitlab.com/zwischenloesung/natem/util"
 )
 
 // showCmd represents the show command
@@ -87,23 +87,23 @@ func init() {
 }
 
 func ShowActions(project string, thing string, behavior string) {
-	fmt.Println("kb.ShowActions(", project, ",", thing, ",", behavior, ") called")
+	fmt.Println("util.ShowActions(", project, ",", thing, ",", behavior, ") called")
 }
 
 func ShowBehavior(project string, thing string) {
-	fmt.Println("kb.ShowBehavior(", project, ",", thing, ") called")
+	fmt.Println("util.ShowBehavior(", project, ",", thing, ") called")
 }
 
 func ShowCategories(project string, thing string) {
-	fmt.Println("kb.ShowCategories(", project, ",", thing, ") called")
+	fmt.Println("util.ShowCategories(", project, ",", thing, ") called")
 }
 
 func ShowParameters(project string, thing string) {
-	fmt.Println("kb.ShowParameters(", project, ",", thing, ") called")
-	theThing := kb.ParseThingFromFile(thing)
+	fmt.Println("util.ShowParameters(", project, ",", thing, ") called")
+	theThing := util.ParseThingFromFile(thing)
 	fmt.Println(theThing)
 }
 
 func ShowRelations(project string, thing string, behavior string) {
-	fmt.Println("kb.ShowRelations(", project, ",", thing, ",", behavior, ") called")
+	fmt.Println("util.ShowRelations(", project, ",", thing, ",", behavior, ") called")
 }

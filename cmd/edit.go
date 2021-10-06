@@ -19,13 +19,13 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"gitlab.com/zwischenloesung/natem/kb"
+	"gitlab.com/zwischenloesung/natem/util"
 )
 
 func EditThing(project string, thing string, editor string) {
 	fmt.Println("EditThing(", project, ",", thing, ",", editor, "", ") called")
 
-	file, _ := kb.GetFilePathFromURL(thing)
+	file, _ := util.GetFilePathFromURL(thing)
 
 	if editor == "" {
 		editor, _ = os.LookupEnv("EDITOR")

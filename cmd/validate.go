@@ -60,5 +60,5 @@ func init() {
 }
 
 func ValidateThing(project string, thing string, schema string) {
-	fmt.Println("kb.ValidateThingFromFile(", project, ",", thing, ",", schema, ") called")
+	fmt.Println("util.ValidateThingFromFile(", project, ",", thing, ",", schema, ") called")
 }

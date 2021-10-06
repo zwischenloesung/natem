@@ -10,7 +10,7 @@ GNU General Public License for more details.
 
 Copyright © 2021 Michael Lustenberger <mic@inofix.ch>
 */
-package kb
+package util
 
 import (
 	"io/ioutil"
