@@ -5,9 +5,10 @@ $id: "https://gitlab.com/zwischenloesung/tsunki/-/raw/master/schema/tsunki_thing
 
 title: "Tsunki Thing Schema"
 description: |
-    Anything mapped in the Tsunki knowledge-base-system is a
-    Tsunki Thing. This schema is the most generic schema any Tsunki
-    Thing follows.
+    Anything mapped in the Tsunki knowledge-base-system is, in it's most basic
+    form, a Tsunki Thing. Such a Thing is handled with, or pointed to, a Tsentsak.
+    The schema here is the most generic description any Tsentsak most follow and
+    therefore any Tsentsak must validate against.
 
 type: "object"
 
