@@ -35,14 +35,14 @@ func ParseURI(u string) (*URI, error) {
 	return &URI{uri}, err
 }
 
-func ParseFileURL(u string) (*Link, error) {
+func ParseFileURL(u string, project string) (*Link, error) {
 	uri, err := ParseURI(u)
 	// Only consider URLs pointing to the local file system, allow for
 	// absolute or relative paths too.
 	if uri.Scheme == "file" || uri.Scheme == "" {
 		uri.Scheme = "file"
 		if uri.Path[0] != byte('/') {
-			//TODO find the top pwd
+			uri.Path = project + "/" + uri.Path
 		}
 		return &Link{*uri}, nil
 	} else {
@@ -52,7 +52,7 @@ func ParseFileURL(u string) (*Link, error) {
 }
 
 // Just get the path of the file back
-func GetFilePathFromURL(u string) (string, error) {
-	uri, err := ParseFileURL(u)
+func GetFilePathFromURL(u string, project string) (string, error) {
+	uri, err := ParseFileURL(u, project)
 	return uri.Path, err
 }

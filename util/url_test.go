@@ -41,7 +41,7 @@ func TestParseURI(t *testing.T) {
 		t.Fatal("parsing the URI (https) did not work as expected")
 	}
 	if b.Path != "" {
-		t.Fatal("'Path' value is expected to be empty while parsing the URI (https)")
+		t.Fatal("'Path' value is expected to be empty while parsing this URI (https)")
 	}
 	b.Path = "foo/bar.html"
 	if b.String() != "https://example.org/foo/bar.html" {
@@ -59,23 +59,26 @@ func TestParseURI(t *testing.T) {
 
 func TestParseFileURL(t *testing.T) {
 	a := "testing/example.yml"
-	b, e := ParseFileURL(a)
+	p := "/home/foo"
+	b, e := ParseFileURL(a, p)
 	if e != nil {
 		t.Fatal("parsing the URI (file) did not work as expected: got an error")
 	}
-	if b.Path != a {
+	if b.Path != p+"/"+a {
 		t.Fatal("parsing the URI (file) did not work as expected: got wrong path")
 	}
 	a = "/tmp/somefile.suffix"
-	b, e = ParseFileURL(a)
+	b, e = ParseFileURL(a, p)
 	if b.Scheme != "file" {
 		t.Fatalf("The string should have been read as a file reference %s.\n", b.String())
 	}
 }
 
 func TestGetFilePathFromURL(t *testing.T) {
-	a, e := GetFilePathFromURL("testing/example.yml")
-	if e != nil || a != "testing/example.yml" {
-		t.Fatalf("parsing the URI (file) did not work as expected, result is: %s", a)
+	a := "testing/example.yml"
+	p := "/home/foo"
+	b, e := GetFilePathFromURL(a, p)
+	if e != nil || b != p+"/"+a {
+		t.Fatalf("parsing the URI (file) did not work as expected, result is: %s", b)
 	}
 }
