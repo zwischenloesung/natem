@@ -55,11 +55,11 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.natem.yaml)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "$HOME/.natem.yaml", "config file")
 
 	cwd, err := os.Getwd()
 	cobra.CheckErr(err)
-	rootCmd.PersistentFlags().StringP("project", "p", cwd, "project directory (default current dir) /")
+	rootCmd.PersistentFlags().StringP("project", "p", "file://"+cwd, "project URL")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
@@ -68,7 +68,7 @@ func init() {
 
 // initConfig reads in config file and ENV variables if set.
 func initConfig() {
-	if cfgFile != "" {
+	if cfgFile != "$HOME/.natem.yaml" {
 		// Use config file from the flag.
 		viper.SetConfigFile(cfgFile)
 	} else {
