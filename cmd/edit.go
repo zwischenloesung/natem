@@ -25,7 +25,7 @@ import (
 func EditThing(project string, thing string, editor string) {
 	fmt.Println("EditThing(", project, ",", thing, ",", editor, "", ") called")
 
-	file, _ := util.GetFilePathFromURL(thing, project)
+	file, _ := util.GetPathFromThingURL(thing, project)
 
 	if editor == "" {
 		editor, _ = os.LookupEnv("EDITOR")

@@ -53,7 +53,7 @@ func ParseThingURL(u string, project string) (*ThingURL, error) {
 }
 
 // Just get the path of the file back
-func GetFilePathFromURL(u string, project string) (string, error) {
+func GetPathFromThingURL(u string, project string) (string, error) {
 	uri, err := ParseThingURL(u, project)
 	return uri.Path, err
 }

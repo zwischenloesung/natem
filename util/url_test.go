@@ -74,10 +74,10 @@ func TestParseThingURL(t *testing.T) {
 	}
 }
 
-func TestGetFilePathFromURL(t *testing.T) {
+func TestGetPathFromThingURL(t *testing.T) {
 	a := "testing/example.yml"
 	p := "/home/foo"
-	b, e := GetFilePathFromURL(a, p)
+	b, e := GetPathFromThingURL(a, p)
 	if e != nil || b != p+"/"+a {
 		t.Fatalf("parsing the URI (file) did not work as expected, result is: %s", b)
 	}
