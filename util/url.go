@@ -21,11 +21,12 @@ type URI struct {
 	*url.URL
 }
 
-type Link struct {
+type ThingURL struct {
 	URI
+	Context string
 }
 
-var SupportedLinkSchemes = []string{"file", "http", "https"}
+var SupportedThingURLSchemes = []string{"file", "http", "https"}
 
 func ParseURI(u string) (*URI, error) {
 	uri, err := url.Parse(u)
@@ -35,7 +36,7 @@ func ParseURI(u string) (*URI, error) {
 	return &URI{uri}, err
 }
 
-func ParseFileURL(u string, project string) (*Link, error) {
+func ParseThingURL(u string, project string) (*ThingURL, error) {
 	uri, err := ParseURI(u)
 	// Only consider URLs pointing to the local file system, allow for
 	// absolute or relative paths too.
@@ -44,15 +45,15 @@ func ParseFileURL(u string, project string) (*Link, error) {
 		if uri.Path[0] != byte('/') {
 			uri.Path = project + "/" + uri.Path
 		}
-		return &Link{*uri}, nil
+		return &ThingURL{*uri, project}, nil
 	} else {
 		log.Fatal("This URL was not of scheme 'file:///' as expected.\n", err)
-		return &Link{*uri}, err
+		return &ThingURL{*uri, project}, err
 	}
 }
 
 // Just get the path of the file back
 func GetFilePathFromURL(u string, project string) (string, error) {
-	uri, err := ParseFileURL(u, project)
+	uri, err := ParseThingURL(u, project)
 	return uri.Path, err
 }

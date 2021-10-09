@@ -57,10 +57,10 @@ func TestParseURI(t *testing.T) {
 	}
 }
 
-func TestParseFileURL(t *testing.T) {
+func TestParseThingURL(t *testing.T) {
 	a := "testing/example.yml"
 	p := "/home/foo"
-	b, e := ParseFileURL(a, p)
+	b, e := ParseThingURL(a, p)
 	if e != nil {
 		t.Fatal("parsing the URI (file) did not work as expected: got an error")
 	}
@@ -68,7 +68,7 @@ func TestParseFileURL(t *testing.T) {
 		t.Fatal("parsing the URI (file) did not work as expected: got wrong path")
 	}
 	a = "/tmp/somefile.suffix"
-	b, e = ParseFileURL(a, p)
+	b, e = ParseThingURL(a, p)
 	if b.Scheme != "file" {
 		t.Fatalf("The string should have been read as a file reference %s.\n", b.String())
 	}
