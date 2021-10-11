@@ -36,24 +36,24 @@ func ParseURI(u string) (*URI, error) {
 	return &URI{uri}, err
 }
 
-func ParseThingURL(u string, project string) (*ThingURL, error) {
+func ParseThingURL(u string, context string) (*ThingURL, error) {
 	uri, err := ParseURI(u)
 	// Only consider URLs pointing to the local file system, allow for
 	// absolute or relative paths too.
 	if uri.Scheme == "file" || uri.Scheme == "" {
 		uri.Scheme = "file"
 		if uri.Path[0] != byte('/') {
-			uri.Path = project + "/" + uri.Path
+			uri.Path = context + "/" + uri.Path
 		}
-		return &ThingURL{*uri, project}, nil
+		return &ThingURL{*uri, context}, nil
 	} else {
 		log.Fatal("This URL was not of scheme 'file:///' as expected.\n", err)
-		return &ThingURL{*uri, project}, err
+		return &ThingURL{*uri, context}, err
 	}
 }
 
 // Just get the path of the file back
-func GetPathFromThingURL(u string, project string) (string, error) {
-	uri, err := ParseThingURL(u, project)
+func GetPathFromThingURL(u string, context string) (string, error) {
+	uri, err := ParseThingURL(u, context)
 	return uri.Path, err
 }

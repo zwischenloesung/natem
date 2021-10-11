@@ -28,8 +28,8 @@ var showCmd = &cobra.Command{
 The focus here lies on the content and behaviour of the things.`,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		viper.BindPFlag("project", rootCmd.PersistentFlags().Lookup("project"))
-		project := viper.GetString("project")
+		viper.BindPFlag("context", rootCmd.PersistentFlags().Lookup("context"))
+		context := viper.GetString("context")
 
 		viper.BindPFlag("thing", cmd.PersistentFlags().Lookup("thing"))
 		thing := viper.GetString("thing")
@@ -47,19 +47,19 @@ The focus here lies on the content and behaviour of the things.`,
 		rel_beh := viper.GetString("relations")
 
 		if beh {
-			ShowBehavior(project, thing)
+			ShowBehavior(context, thing)
 		}
 		if cat {
-			ShowCategories(project, thing)
+			ShowCategories(context, thing)
 		}
 		if act_beh != "" {
-			ShowActions(project, thing, act_beh)
+			ShowActions(context, thing, act_beh)
 		}
 		if rel_beh != "" {
-			ShowRelations(project, thing, rel_beh)
+			ShowRelations(context, thing, rel_beh)
 		}
 		if !beh && !cat && act_beh == "" && rel_beh == "" {
-			ShowParameters(project, thing)
+			ShowParameters(context, thing)
 		}
 	},
 }
@@ -86,24 +86,24 @@ func init() {
 	// showCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
-func ShowActions(project string, thing string, behavior string) {
-	fmt.Println("util.ShowActions(", project, ",", thing, ",", behavior, ") called")
+func ShowActions(context string, thing string, behavior string) {
+	fmt.Println("util.ShowActions(", context, ",", thing, ",", behavior, ") called")
 }
 
-func ShowBehavior(project string, thing string) {
-	fmt.Println("util.ShowBehavior(", project, ",", thing, ") called")
+func ShowBehavior(context string, thing string) {
+	fmt.Println("util.ShowBehavior(", context, ",", thing, ") called")
 }
 
-func ShowCategories(project string, thing string) {
-	fmt.Println("util.ShowCategories(", project, ",", thing, ") called")
+func ShowCategories(context string, thing string) {
+	fmt.Println("util.ShowCategories(", context, ",", thing, ") called")
 }
 
-func ShowParameters(project string, thing string) {
-	fmt.Println("util.ShowParameters(", project, ",", thing, ") called")
+func ShowParameters(context string, thing string) {
+	fmt.Println("util.ShowParameters(", context, ",", thing, ") called")
 	theThing := util.ParseThingFromFile(thing)
 	fmt.Println(theThing)
 }
 
-func ShowRelations(project string, thing string, behavior string) {
-	fmt.Println("util.ShowRelations(", project, ",", thing, ",", behavior, ") called")
+func ShowRelations(context string, thing string, behavior string) {
+	fmt.Println("util.ShowRelations(", context, ",", thing, ",", behavior, ") called")
 }

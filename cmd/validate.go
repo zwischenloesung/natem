@@ -28,8 +28,8 @@ Validate the thing provided against a schema definition and report back
 to the user.`,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		viper.BindPFlag("project", rootCmd.PersistentFlags().Lookup("project"))
-		project := viper.GetString("project")
+		viper.BindPFlag("context", rootCmd.PersistentFlags().Lookup("context"))
+		context := viper.GetString("context")
 
 		viper.BindPFlag("thing", cmd.PersistentFlags().Lookup("thing"))
 		thing := viper.GetString("thing")
@@ -37,7 +37,7 @@ to the user.`,
 		viper.BindPFlag("schema", cmd.PersistentFlags().Lookup("schema"))
 		schema := viper.GetString("schema")
 
-		ValidateThing(project, thing, schema)
+		ValidateThing(context, thing, schema)
 	},
 }
 
@@ -59,6 +59,6 @@ func init() {
 	// validateCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
-func ValidateThing(project string, thing string, schema string) {
-	fmt.Println("util.ValidateThingFromFile(", project, ",", thing, ",", schema, ") called")
+func ValidateThing(context string, thing string, schema string) {
+	fmt.Println("util.ValidateThingFromFile(", context, ",", thing, ",", schema, ") called")
 }

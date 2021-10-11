@@ -22,10 +22,10 @@ import (
 	"gitlab.com/zwischenloesung/natem/util"
 )
 
-func EditThing(project string, thing string, editor string) {
-	fmt.Println("EditThing(", project, ",", thing, ",", editor, "", ") called")
+func EditThing(context string, thing string, editor string) {
+	fmt.Println("EditThing(", context, ",", thing, ",", editor, "", ") called")
 
-	file, _ := util.GetPathFromThingURL(thing, project)
+	file, _ := util.GetPathFromThingURL(thing, context)
 
 	if editor == "" {
 		editor, _ = os.LookupEnv("EDITOR")
@@ -51,8 +51,8 @@ var editCmd = &cobra.Command{
 The focus here lies on the content and behaviour of the things.`,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		viper.BindPFlag("project", rootCmd.PersistentFlags().Lookup("project"))
-		project := viper.GetString("project")
+		viper.BindPFlag("context", rootCmd.PersistentFlags().Lookup("context"))
+		context := viper.GetString("context")
 
 		viper.BindPFlag("thing", cmd.PersistentFlags().Lookup("thing"))
 		thing := viper.GetString("thing")
@@ -60,7 +60,7 @@ The focus here lies on the content and behaviour of the things.`,
 		viper.BindPFlag("editor", cmd.PersistentFlags().Lookup("editor"))
 		editor := viper.GetString("editor")
 
-		EditThing(project, thing, editor)
+		EditThing(context, thing, editor)
 	},
 }
 

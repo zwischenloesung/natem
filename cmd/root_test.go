@@ -53,6 +53,6 @@ func TestExecuteOptions(t *testing.T) {
 	// TODO
 	rootCmd.SetArgs([]string{"--config", "test.conf"})
 	cobra.CheckErr(rootCmd.Execute())
-	rootCmd.SetArgs([]string{"--project", "/tmp/foo"})
+	rootCmd.SetArgs([]string{"--context", "/tmp/foo"})
 	cobra.CheckErr(rootCmd.Execute())
 }

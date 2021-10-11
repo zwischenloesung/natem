@@ -11,7 +11,7 @@
 
 <div class="mermaid">
     graph LR
-    Start[tsunki] --> Context[-p context_folder]
+    Start[tsunki] --> Context[-c context_folder]
     Context --> Init[init] --> InitDesc[Initialize a new context folder and register it for the user]
     Context --> Validate[validate] --> ValidateThing[-t thing] --> ValidateSchema[optional: -s schema] --> ValidateDesc[Validate a tsunki-yaml file against its schema]
     Context --> Edit[edit]

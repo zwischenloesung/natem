@@ -59,7 +59,7 @@ func init() {
 
 	cwd, err := os.Getwd()
 	cobra.CheckErr(err)
-	rootCmd.PersistentFlags().StringP("project", "p", "file://"+cwd, "project URL")
+	rootCmd.PersistentFlags().StringP("context", "c", "file://"+cwd, "context URL")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
