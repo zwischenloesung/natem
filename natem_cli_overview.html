@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({startOnLoad:true});</script>
+
+<h1>Natem CLI</h1>
+
+<div class="mermaid">
+    graph LR
+    Start[tsunki] --> Context[-p context_folder]
+    Context --> Init[init] --> InitDesc[Initialize a new context folder and register it for the user]
+    Context --> Validate[validate] --> ValidateThing[-t thing] --> ValidateSchema[optional: -s schema] --> ValidateDesc[Validate a tsunki-yaml file against its schema]
+    Context --> Edit[edit]
+    Edit --> ThingEdit[-t thing] --> ThingEditDesc[Edit the thing specified with your favorite editor]
+    Context --> Add[add] --> ThingAdd[-t thing] --> ThingAddDesc[Add a new thing]
+    Context --> Rm[remove] --> ThingRm[-t thing] --> ThingRmDesc[Remove a thing from the knowledge base]
+    Context --> Search[search]
+    Search --> ParamSearch[-p parameter] --> ParamSearchDesc[Search for parameter in the contents field of all documents]
+    Search --> VarSearch[-v tsunki-variable] --> VarSearchDesc[Search for variable-name in the contents field of all documents]
+    Search --> StringSearch[-s string] --> StringSearchDesc[Search for string in the contents field of all documents]
+    Context --> Show[show]
+    Show --> Thing[-t thing]
+    Thing --> ThingParam[default:-P] --> ThingParamDesc[List the parameters/content set for this thing]
+    Thing --> ThingCat[-C] --> ThingCatDesc[List the category hierarchy of the thing]
+    Thing --> ThingBehavior[-B] --> ThingBehaviorDesc[List the available behaviors of the thing]
+    Thing --> ThingRelations[-R behavior] --> ThingRelationsDesc[List the relations for this behaviour of the thing]
+    Thing --> ThingActions[-A behavior] --> ThingActionsDesc[List the actions for this behavior of the thing]
+    Context --> List[list]
+    List --> Things[-t] --> ThingsDesc[List available things - concrete and abstract]
+    List --> Cats[-c] --> CatsDesc[List available categories - this are abstract things]
+    List --> Acts[-a] --> ActsDesc[List available actions]
+    Context --> Do[do] --> DoThing[-t thing] --> DoAct[-a action] --> DoActDesc[Execute an action for this thing]
+</div>
+</body>
+</html>
