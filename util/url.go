@@ -20,9 +20,27 @@ import (
 type ThingURL struct {
 	*url.URL
 	ContextPath string
+	RW          bool
 }
 
-var SupportedThingURLSchemes = []string{"file", "http", "https"}
+var SupportedThingURLSchemesRO = []string{"file", "http", "https"}
+var SupportedThingURLSchemesRW = []string{"file"}
+
+func isSupportedThingURLScheme(schemeString string) (bool, bool) {
+	isRO := false
+	isRW := false
+	for _, i := range SupportedThingURLSchemesRO {
+		if i == schemeString {
+			isRO = true
+		}
+	}
+	for _, i := range SupportedThingURLSchemesRW {
+		if i == schemeString {
+			isRW = true
+		}
+	}
+	return isRO, isRW
+}
 
 func ParseThingURL(thingURI string, contextURI string) (*ThingURL, error) {
 	tu, err := url.Parse(thingURI)
@@ -34,16 +52,34 @@ func ParseThingURL(thingURI string, contextURI string) (*ThingURL, error) {
 		return nil, err
 	}
 
-	// Only consider URLs pointing to the local file system, allow for
-	// absolute or relative paths too.
-	if tu.Scheme == "file" || tu.Scheme == "" {
-		tu.Scheme = "file"
-		if tu.Path[0] != byte('/') {
-			tu.Path = cu.Path + "/" + tu.Path
+	if tu.Path == "" {
+		return nil, errors.New("This thing might not have an empty path.\n")
+	}
+	if cu.Path[0] != byte('/') {
+		return nil, errors.New("The context path of this thing must be absolute.\n")
+	}
+
+	if tu.Path[0] != byte('/') {
+		tu.Path = cu.Path + "/" + tu.Path
+	}
+
+	if tu.Scheme == "" {
+		if cu.Scheme == "" {
+			tu.Scheme = "file"
+		} else {
+			tu.Scheme = cu.Scheme
 		}
-		return &ThingURL{tu, cu.Path}, nil
 	} else {
-		return &ThingURL{tu, cu.Path}, errors.New("This URL was not of scheme 'file:///' as expected.\n")
+		if cu.Scheme != tu.Scheme {
+			return &ThingURL{tu, cu.Path, false}, errors.New("Thing and context URLs do not match.\n")
+		}
+	}
+
+	r, w := isSupportedThingURLScheme(tu.Scheme)
+	if r {
+		return &ThingURL{tu, cu.Path, w}, nil
+	} else {
+		return &ThingURL{tu, cu.Path, w}, errors.New("This URL does not have a compatible scheme.\n")
 	}
 }
 
