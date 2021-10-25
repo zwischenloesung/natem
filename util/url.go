@@ -19,27 +19,31 @@ import (
 
 type ThingURL struct {
 	*url.URL
-	Context string
+	ContextPath string
 }
 
 var SupportedThingURLSchemes = []string{"file", "http", "https"}
 
-func ParseThingURL(u string, context string) (*ThingURL, error) {
-	uri, err := url.Parse(u)
+func ParseThingURL(thingURI string, contextURI string) (*ThingURL, error) {
+	tu, err := url.Parse(thingURI)
+	if err != nil {
+		return nil, err
+	}
+	cu, err := url.Parse(contextURI)
 	if err != nil {
 		return nil, err
 	}
 
 	// Only consider URLs pointing to the local file system, allow for
 	// absolute or relative paths too.
-	if uri.Scheme == "file" || uri.Scheme == "" {
-		uri.Scheme = "file"
-		if uri.Path[0] != byte('/') {
-			uri.Path = context + "/" + uri.Path
+	if tu.Scheme == "file" || tu.Scheme == "" {
+		tu.Scheme = "file"
+		if tu.Path[0] != byte('/') {
+			tu.Path = cu.Path + "/" + tu.Path
 		}
-		return &ThingURL{uri, context}, nil
+		return &ThingURL{tu, cu.Path}, nil
 	} else {
-		return &ThingURL{uri, context}, errors.New("This URL was not of scheme 'file:///' as expected.\n")
+		return &ThingURL{tu, cu.Path}, errors.New("This URL was not of scheme 'file:///' as expected.\n")
 	}
 }
 
