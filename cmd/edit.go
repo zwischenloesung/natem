@@ -25,13 +25,13 @@ import (
 func EditThing(context string, thing string, editor string) {
 	fmt.Println("EditThing(", context, ",", thing, ",", editor, "", ") called")
 
-	file, _ := util.GetPathFromThingURL(thing, context)
+	filePath, _ := util.GetPathFromThingURL(thing, context)
 
 	if editor == "" {
 		editor, _ = os.LookupEnv("EDITOR")
 	}
 
-	cmd := exec.Command(editor, file)
+	cmd := exec.Command(editor, filePath)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
@@ -75,7 +75,7 @@ func init() {
 
 	editCmd.PersistentFlags().StringP("thing", "t", "", "summarize the info for this thing")
 	editCmd.MarkPersistentFlagRequired("thing")
-	editCmd.Flags().String("editor", "", "specify the editor of choice (default: Environment Variable $EDITOR)")
+	editCmd.PersistentFlags().String("editor", "", "specify the editor of choice (default: Environment Variable $EDITOR)")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
