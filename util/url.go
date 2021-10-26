@@ -89,5 +89,8 @@ func ParseThingURL(thingURI string, contextURI string) (*ThingURL, error) {
 // Just get the path of the file back
 func GetPathFromThingURL(u string, context string) (string, error) {
 	uri, err := ParseThingURL(u, context)
+	if uri.Scheme != "file" {
+		err = errors.New("This path is not local, scheme must be 'file'.\n")
+	}
 	return uri.Path, err
 }

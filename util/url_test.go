@@ -74,4 +74,22 @@ func TestGetPathFromThingURL(t *testing.T) {
 	if e != nil || b != p+"/"+a {
 		t.Fatalf("parsing the URI (file) did not work as expected, result is: %s", b)
 	}
+	t.Log("Now failing successfully (Thing inside Context)")
+	a = "/testing/example.yml"
+	p = "/home/foo"
+	b, e = GetPathFromThingURL(a, p)
+	if e != nil {
+		t.Logf("Expected error was: %s.\n", e)
+	} else {
+		t.Fatalf("parsing the URI (file) did not work as expected, should have thrown an error. The result is: %s", b)
+	}
+	t.Log("Now failing successfully (remote Things are not allowed)")
+	a = "testing/example.yml"
+	p = "https://example.org/home/foo"
+	b, e = GetPathFromThingURL(a, p)
+	if e != nil {
+		t.Logf("Expected error was: %s.\n", e)
+	} else {
+		t.Fatalf("parsing the URI (file) did not work as expected, should have thrown an error. The result is: %s", b)
+	}
 }
