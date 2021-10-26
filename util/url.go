@@ -15,6 +15,7 @@ package util
 import (
 	"errors"
 	"net/url"
+	"strings"
 )
 
 type ThingURL struct {
@@ -61,6 +62,8 @@ func ParseThingURL(thingURI string, contextURI string) (*ThingURL, error) {
 
 	if tu.Path[0] != byte('/') {
 		tu.Path = cu.Path + "/" + tu.Path
+	} else if !strings.HasPrefix(tu.Path, cu.Path) {
+		return &ThingURL{tu, cu.Path, false}, errors.New("Thing and context URLs do not match.\n")
 	}
 
 	if tu.Scheme == "" {
