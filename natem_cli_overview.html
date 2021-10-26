@@ -16,7 +16,7 @@
     Context --> Validate[validate] --> ValidateThing[-t thing] --> ValidateSchema[optional: -s schema] --> ValidateDesc[Validate a tsunki-yaml file against its schema]
     Context --> Edit[edit]
     Edit --> ThingEdit[-t thing] --> ThingEditDesc[Edit the thing specified with your favorite editor]
-    Context --> Add[add] --> ThingAdd[-t thing] --> ThingAddDesc[Add a new thing]
+    Context --> Create[create] --> ThingCreate[-t thing] --> ThingCreateDesc[Create a new thing]
     Context --> Rm[remove] --> ThingRm[-t thing] --> ThingRmDesc[Remove a thing from the knowledge base]
     Context --> Search[search]
     Search --> ParamSearch[-p parameter] --> ParamSearchDesc[Search for parameter in the contents field of all documents]
