@@ -33,11 +33,11 @@ func TestValidateThing(t *testing.T) {
 	s := "{ \"type\": \"object\", \"properties\": { \"_version\": { \"type\": \"string\" } } }"
 	sc := []byte(s)
 	if !ValidateJSONThing(sc, data) {
-		t.Fatal("this should have validated successfully...")
+		t.Fatal("this (JSON) should have validated successfully...")
 	}
 	s = "{ \"type\": \"object\", \"properties\": { \"_version\": { \"type\": \"array\" } } }"
 	sc = []byte(s)
-	t.Log("Now failing successfully:")
+	t.Log("Now failing successfully (wrong type):")
 	if ValidateJSONThing(sc, data) {
 		t.Fatal("this should not have validated...")
 	}
@@ -46,7 +46,7 @@ func TestValidateThing(t *testing.T) {
 	s = "---\ntype: \"object\"\nproperties:\n  _version:\n    type: \"string\""
 	sc = []byte(s)
 	if !ValidateYAMLThing(sc, data) {
-		t.Fatal("this should not have validated...")
+		t.Fatal("this (YAML) should have validated successfully...")
 	}
 }
 
