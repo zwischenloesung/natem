@@ -17,6 +17,7 @@ import (
 	"log"
 
 	"github.com/ghodss/yaml"
+	"github.com/google/uuid"
 	"github.com/xeipuuv/gojsonschema"
 )
 
@@ -43,6 +44,13 @@ type Thing struct {
 		Name string `json:"name"`
 		Uri  string `json:"uri"` // URI:Address
 	} `json:"_references"`
+}
+
+func NewThing() *Thing {
+
+	t := new(Thing)
+	t.Id = uuid.New().String()
+	return t
 }
 
 func ValidateJSONThing(schemaBytes []byte, contentBytes []byte) bool {
