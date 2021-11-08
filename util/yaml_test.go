@@ -40,6 +40,8 @@ func TestValidateThing(t *testing.T) {
 	t.Log("Now failing successfully (wrong type):")
 	if ValidateJSONThing(sc, data) {
 		t.Fatal("this should not have validated...")
+	} else {
+		t.Log("this document failed to validate (which is good).")
 	}
 	d = "---\n_version: \"0.1\""
 	data = []byte(d)
@@ -52,7 +54,7 @@ func TestValidateThing(t *testing.T) {
 
 func TestParseThing(t *testing.T) {
 
-	a := "---\n_name: 'example'\n"
+	a := "---\nname: 'example'\n"
 	b := []byte(a)
 	c := ParseThing(b)
 	if c.Name != "example" {

@@ -22,21 +22,35 @@ import (
 )
 
 type Thing struct {
-	Targets      []string `json:"targets"` // URI:Link
-	Behavior     struct{} `json:"behaviour"`
-	Content      struct{} `json:"content"`
-	Id           string   `json:"_id"` // URI:UUID
-	Alias        []string `json:"_alias"`
-	Name         string   `json:"_name"`         // URI:... (locally unique as path is added?)
-	Urls         []string `json:"_urls"`         // URI:Link
+	Id      string   `json:"id"`   // URI:UUID
+	Name    string   `json:"name"` // URI:... (locally unique as path is added?)
+	Urls    []string `json:"urls"` // URI:Link
+	Targets struct {
+		Url     string `json:"url"` // URI:Link
+		Version string `json:"version"`
+	} `json:"targets"`
+	Behavior struct {
+		Is         []Thing `json:"is"`
+		Is_like    []Thing `json:"is_like"`
+		is_part_of []Thing `json:"is_part_of"`
+		seems      []Thing `json:"seems"`
+		is_not     []Thing `json:"is_not"`
+		has        []Thing `json:"has"`
+		//		hosts
+		//		inhabits
+		// 		is_located
+		belongs_to []Thing `json:"belongs_to"`
+		//		execute
+	} `json:"behaviour"`
+	Property struct{} `json:"property"`
+	Schema   struct {
+		Name    string   `json:"name"`    // URI:tag?
+		Version string   `json:"version"` // URI:tag would be nice!
+		Urls    []string `json:"urls"`    //(auto-calculated?)
+	} `json:"_type"`
 	Version      string   `json:"_version"`      // URI tag would be nice!
 	Dependencies []string `json:"_dependencies"` // URI:Link
-	Type         struct {
-		Name    string `json:"name"`    // URI:tag?
-		Version string `json:"version"` // URI:tag would be nice!
-		//		Schema  URI `json:"schema"` (auto-calculated)
-	} `json:"_type"`
-	Authors []struct {
+	Authors      []struct {
 		Name string `json:"name"`
 		Uri  string `json:"uri"` // URI:Address
 	} `json:"_authors"`
