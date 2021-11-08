@@ -22,21 +22,41 @@ import (
 )
 
 type Thing struct {
-	Targets      []string `json:"targets"` // URI:Link
-	Behavior     struct{} `json:"behaviour"`
-	Content      struct{} `json:"content"`
-	Id           string   `json:"_id"` // URI:UUID
-	Alias        []string `json:"_alias"`
-	Name         string   `json:"_name"`         // URI:... (locally unique as path is added?)
-	Urls         []string `json:"_urls"`         // URI:Link
+	Id      string   `json:"id"`   // URI:UUID
+	Name    string   `json:"name"` // URI:... (locally unique as path is added?)
+	Urls    []string `json:"urls"` // URI:Link
+	Targets struct {
+		Url     string `json:"url"` // URI:Link
+		Version string `json:"version"`
+	} `json:"targets"`
+	Behavior struct {
+		Is       []Thing `json:"is"`
+		IsLike   []Thing `json:"is_like"`
+		IsPartOf []Thing `json:"is_part_of"`
+		Seems    []Thing `json:"seems"`
+		IsNot    []Thing `json:"is_not"`
+		Has      []Thing `json:"has"`
+		//		hosts
+		//		inhabits
+		// 		is_located_at
+		BelongsTo []Thing `json:"belongs_to"`
+		//		execute
+	} `json:"behaviour"`
+	Property struct {
+		Name        []struct{} `json:"name"`  // map of `<lang>: <value>`
+		Alias       []struct{} `json:"alias"` // map of `<lang>: <value>`
+		Description []struct{} `json:"name"`  // map of `<long/short>:: <lang>: <value>`
+		Tags        []string   `json:"tags"`
+	} `json:"property"`
+	Schema struct {
+		Name    string   `json:"name"`    // URI:tag?
+		Version string   `json:"version"` // URI:tag would be nice!
+		Urls    []string `json:"urls"`    //(auto-calculated?)
+		//Compatibility string `json:"compatibility"`
+	} `json:"_schema"`
 	Version      string   `json:"_version"`      // URI tag would be nice!
 	Dependencies []string `json:"_dependencies"` // URI:Link
-	Type         struct {
-		Name    string `json:"name"`    // URI:tag?
-		Version string `json:"version"` // URI:tag would be nice!
-		//		Schema  URI `json:"schema"` (auto-calculated)
-	} `json:"_type"`
-	Authors []struct {
+	Authors      []struct {
 		Name string `json:"name"`
 		Uri  string `json:"uri"` // URI:Address
 	} `json:"_authors"`
