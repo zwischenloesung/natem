@@ -41,7 +41,7 @@ type Thing struct {
 		// 		is_located_at
 		BelongsTo []Thing `json:"belongs_to"`
 		//		execute
-	} `json:"behaviour"`
+	} `json:"behavior"`
 	Property struct {
 		Name        []struct{} `json:"name"`  // map of `<lang>: <value>`
 		Alias       []struct{} `json:"alias"` // map of `<lang>: <value>`
