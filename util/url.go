@@ -54,7 +54,7 @@ func ParseThingURL(thingURI string, contextURI string) (*ThingURL, error) {
 	}
 
 	if tu.Path == "" {
-		return nil, errors.New("This thing might not have an empty path.\n")
+		return nil, errors.New("This thing must not have an empty path.\n")
 	}
 	if cu.Path[0] != byte('/') {
 		return nil, errors.New("The context path of this thing must be absolute.\n")
