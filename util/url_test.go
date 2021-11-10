@@ -19,38 +19,39 @@ import (
 
 func TestParseThingURL(t *testing.T) {
 	a := "testing/example.yml"
+	b := true
 	c := "/home/foo"
-	b, e := ParseThingURL(a, c)
+	d, e := ParseThingURL(a, c, b)
 	if e != nil {
 		t.Fatalf("parsing the path did not work as expected: got an error: %s.\n", e)
 	}
-	if b.Path != c+"/"+a {
+	if d.Path != c+"/"+a {
 		t.Fatal("parsing the path did not work as expected: got wrong path")
 	}
-	if b.Scheme != "file" {
-		t.Fatalf("The string should have been read as a file reference %s.\n", b.String())
+	if d.Scheme != "file" {
+		t.Fatalf("The string should have been read as a file reference %s.\n", d.String())
 	}
 	a = "testing/example.yml"
 	c = "file:///home/foo"
-	if b.Scheme+"://"+b.Path != c+"/"+a {
-		t.Fatalf("parsing the URI (file) did not work as expected: got wrong path %s://%s.\n", b.Scheme, b.Path)
+	if d.Scheme+"://"+d.Path != c+"/"+a {
+		t.Fatalf("parsing the URI (file) did not work as expected: got wrong path %s://%s.\n", d.Scheme, d.Path)
 	}
 	a = "/tmp/somefile.suffix"
 	c = "https://example.org/home/foo"
-	b, e = ParseThingURL(a, c)
-	if b.Path != a {
+	d, e = ParseThingURL(a, c, b)
+	if d.Path != a {
 		t.Fatal("parsing the URI (file) did not work as expected: did not get the original path back.\n")
 	}
 	a = "file:///home/foo/somefile.suffix"
 	c = "file:///home/foo"
-	b, e = ParseThingURL(a, c)
-	if b.Scheme+"://"+b.Path != a {
+	d, e = ParseThingURL(a, c, b)
+	if d.Scheme+"://"+d.Path != a {
 		t.Fatal("parsing the URI (file) did not work as expected: both parameters should accept a URL or a local path string.")
 	}
 	t.Log("Now failing successfully (URL-Scheme):")
 	a = "http://example.com/tmp/somefile.suffix"
 	c = "file:///home/foo"
-	b, e = ParseThingURL(a, c)
+	d, e = ParseThingURL(a, c, b)
 	if e == nil {
 		t.Fatalf("parsing different URLs should produce an error...")
 	} else {
@@ -59,7 +60,7 @@ func TestParseThingURL(t *testing.T) {
 	t.Log("Now failing successfully (URL-Path):")
 	a = "file:///tmp/somefile.suffix"
 	c = "file:///home/foo"
-	b, e = ParseThingURL(a, c)
+	d, e = ParseThingURL(a, c, b)
 	if e == nil {
 		t.Fatalf("parsing different paths should produce an error...")
 	} else {
@@ -67,29 +68,30 @@ func TestParseThingURL(t *testing.T) {
 	}
 }
 
-func TestGetPathFromThingURL(t *testing.T) {
+func TestGetThingPathURL(t *testing.T) {
 	a := "testing/example.yml"
+	b := true
 	p := "/home/foo"
-	b, e := GetPathFromThingURL(a, p)
-	if e != nil || b != p+"/"+a {
-		t.Fatalf("parsing the URI (file) did not work as expected, result is: %s", b)
+	d, e := GetThingPathURL(a, p, b)
+	if e != nil || d != p+"/"+a {
+		t.Fatalf("parsing the URI (file) did not work as expected, result is: %s", d)
 	}
 	t.Log("Now failing successfully (Thing inside Context)")
 	a = "/testing/example.yml"
 	p = "/home/foo"
-	b, e = GetPathFromThingURL(a, p)
+	d, e = GetThingPathURL(a, p, b)
 	if e != nil {
 		t.Logf("Expected error was: %s.\n", e)
 	} else {
-		t.Fatalf("parsing the URI (file) did not work as expected, should have thrown an error. The result is: %s", b)
+		t.Fatalf("parsing the URI (file) did not work as expected, should have thrown an error. The result is: %s", d)
 	}
 	t.Log("Now failing successfully (remote Things are not allowed)")
 	a = "testing/example.yml"
 	p = "https://example.org/home/foo"
-	b, e = GetPathFromThingURL(a, p)
+	d, e = GetThingPathURL(a, p, b)
 	if e != nil {
 		t.Logf("Expected error was: %s.\n", e)
 	} else {
-		t.Fatalf("parsing the URI (file) did not work as expected, should have thrown an error. The result is: %s", b)
+		t.Fatalf("parsing the URI (file) did not work as expected, should have thrown an error. The result is: %s", d)
 	}
 }

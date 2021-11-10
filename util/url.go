@@ -25,7 +25,7 @@ type ThingURL struct {
 }
 
 var SupportedThingURLSchemesRO = []string{"file", "http", "https"}
-var SupportedThingURLSchemesRW = []string{"file"}
+var SupportedThingURLSchemesRW = string("file")
 
 func isSupportedThingURLScheme(schemeString string) (bool, bool) {
 	isRO := false
@@ -35,15 +35,23 @@ func isSupportedThingURLScheme(schemeString string) (bool, bool) {
 			isRO = true
 		}
 	}
-	for _, i := range SupportedThingURLSchemesRW {
-		if i == schemeString {
-			isRW = true
-		}
+	if schemeString == SupportedThingURLSchemesRW {
+		isRW = true
 	}
 	return isRO, isRW
 }
 
-func ParseThingURL(thingURI string, contextURI string) (*ThingURL, error) {
+/*
+	ParseThingURL
+      args
+		thingURL		the string to be parsed
+		contextURL		a string with the context information
+		isInContext		bool, whether to consider the context mandatory
+	  returns
+		ThingURL        pointer to a ThingURL containing the locator info
+		error			status of the ThingURL
+*/
+func ParseThingURL(thingURI string, contextURI string, isInsideContext bool) (*ThingURL, error) {
 	tu, err := url.Parse(thingURI)
 	if err != nil {
 		return nil, err
@@ -62,13 +70,13 @@ func ParseThingURL(thingURI string, contextURI string) (*ThingURL, error) {
 
 	if tu.Path[0] != byte('/') {
 		tu.Path = cu.Path + "/" + tu.Path
-	} else if !strings.HasPrefix(tu.Path, cu.Path) {
+	} else if isInsideContext && !strings.HasPrefix(tu.Path, cu.Path) {
 		return &ThingURL{tu, cu.Path, false}, errors.New("Thing and context URLs do not match.\n")
 	}
 
 	if tu.Scheme == "" {
 		if cu.Scheme == "" {
-			tu.Scheme = "file"
+			tu.Scheme = SupportedThingURLSchemesRW
 		} else {
 			tu.Scheme = cu.Scheme
 		}
@@ -87,9 +95,9 @@ func ParseThingURL(thingURI string, contextURI string) (*ThingURL, error) {
 }
 
 // Just get the path of the file back
-func GetPathFromThingURL(u string, context string) (string, error) {
-	uri, err := ParseThingURL(u, context)
-	if uri.Scheme != "file" {
+func GetThingPathURL(u string, context string, isInContext bool) (string, error) {
+	uri, err := ParseThingURL(u, context, isInContext)
+	if uri.Scheme != SupportedThingURLSchemesRW {
 		err = errors.New("This path is not local, scheme must be 'file'.\n")
 	}
 	return uri.Path, err

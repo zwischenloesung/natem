@@ -25,7 +25,7 @@ import (
 func EditThing(context string, thing string, editor string) {
 	fmt.Println("EditThing(", context, ",", thing, ",", editor, "", ") called")
 
-	filePath, _ := util.GetPathFromThingURL(thing, context)
+	filePath, _ := util.GetThingPathURL(thing, context, true)
 
 	if editor == "" {
 		editor, _ = os.LookupEnv("EDITOR")
