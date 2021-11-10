@@ -22,8 +22,8 @@ import (
 var treeCmd = &cobra.Command{
 	Use:   "tree",
 	Short: "Tree View",
-	Long: `A visualization of the information stored. The focus here lies
-on the 'is' realation, i.e. the categories.`,
+	Long: `A visualization of the information stored in the knowledge base. The
+focus here lies on the 'is' realation, i.e. the categories.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("tree called")
 	},

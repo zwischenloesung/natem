@@ -46,9 +46,10 @@ func EditThing(context string, thing string, editor string) {
 // editCmd represents the edit command
 var editCmd = &cobra.Command{
 	Use:   "edit",
-	Short: "Edit View",
-	Long: `Edit a visualization of the information stored in the knowledge base.
-The focus here lies on the content and behaviour of the things.`,
+	Short: "Open a Thing in an editor",
+	Long: `Open an editor and edit the information stored in a Thing of the
+knowledge base. The focus here lies on the content and behaviour of the
+Things.`,
 	Run: func(cmd *cobra.Command, args []string) {
 
 		viper.BindPFlag("context", rootCmd.PersistentFlags().Lookup("context"))
