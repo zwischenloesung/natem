@@ -38,7 +38,7 @@ func TestParseThingURL(t *testing.T) {
 	}
 	a = "/tmp/somefile.suffix"
 	c = "https://example.org/home/foo"
-	d, e = ParseThingURL(a, c, b)
+	d, e = ParseThingURL(a, c, false)
 	if d.Path != a {
 		t.Fatal("parsing the URI (file) did not work as expected: did not get the original path back.\n")
 	}
@@ -65,6 +65,30 @@ func TestParseThingURL(t *testing.T) {
 		t.Fatalf("parsing different paths should produce an error...")
 	} else {
 		t.Logf("got the expected error: %s.\n", e)
+	}
+	a = "file:///tmp/somefile.suffix"
+	c = "file:///home/foo"
+	d, e = ParseThingURL(a, c, false)
+	if e == nil {
+		t.Logf("parsing different paths is now ok...")
+	} else {
+		t.Fatalf("got the unexpected error: %s.\n", e)
+	}
+	t.Log("Now failing successfully (URL-Path):")
+	a = "file:///tmp/../somefile.suffix"
+	d, e = ParseThingURL(a, c, b)
+	if e != nil {
+		t.Logf("climbing up directories is forbidden. %s.\n", e)
+	} else {
+		t.Fatalf("climbing up directories should have produced an error.\n")
+	}
+	a = "file:///tmp/../somefile.suffix"
+	c = "file:///home/foo"
+	d, e = ParseThingURL(a, c, false)
+	if e == nil {
+		t.Logf("climbing up directories is now ok...")
+	} else {
+		t.Fatalf("got the unexpected error: %s.\n", e)
 	}
 }
 

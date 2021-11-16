@@ -24,6 +24,8 @@ type ThingURL struct {
 	RW          bool
 }
 
+var UrlThingOutsideContextError = errors.New("Thing and context URLs do not match.\n")
+
 var SupportedThingURLSchemesRO = []string{"file", "http", "https"}
 var SupportedThingURLSchemesRW = string("file")
 
@@ -68,10 +70,13 @@ func ParseThingURL(thingURI string, contextURI string, hasContext bool) (*ThingU
 		return nil, errors.New("The context path of this thing must be absolute.\n")
 	}
 
+	if hasContext && strings.Contains(tu.Path, "..") {
+		return &ThingURL{tu, cu.Path, false}, UrlThingOutsideContextError
+	}
 	if tu.Path[0] != byte('/') {
 		tu.Path = cu.Path + "/" + tu.Path
 	} else if hasContext && !strings.HasPrefix(tu.Path, cu.Path) {
-		return &ThingURL{tu, cu.Path, false}, errors.New("Thing and context URLs do not match.\n")
+		return &ThingURL{tu, cu.Path, false}, UrlThingOutsideContextError
 	}
 
 	if tu.Scheme == "" {
@@ -82,7 +87,7 @@ func ParseThingURL(thingURI string, contextURI string, hasContext bool) (*ThingU
 		}
 	} else {
 		if cu.Scheme != tu.Scheme {
-			return &ThingURL{tu, cu.Path, false}, errors.New("Thing and context URLs do not match.\n")
+			return &ThingURL{tu, cu.Path, false}, UrlThingOutsideContextError
 		}
 	}
 
@@ -97,7 +102,7 @@ func ParseThingURL(thingURI string, contextURI string, hasContext bool) (*ThingU
 // Just get the path of the file back
 func GetThingPathURL(u string, context string, hasContext bool) (string, error) {
 	uri, err := ParseThingURL(u, context, hasContext)
-	if uri.Scheme != SupportedThingURLSchemesRW {
+	if err == nil && !uri.RW {
 		err = errors.New("This path is not local, scheme must be 'file'.\n")
 	}
 	return uri.Path, err

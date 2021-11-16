@@ -22,10 +22,17 @@ import (
 	"gitlab.com/zwischenloesung/natem/util"
 )
 
-func EditThing(editor string, thing string, context string, hasContext bool) {
-	fmt.Println("EditThing(", context, ",", thing, ",", editor, "", ") called")
+func EditThing(editor string, thing string, context string, isContextless bool) {
 
-	filePath, _ := util.GetThingPathURL(thing, context, true)
+	filePath, err := util.GetThingPathURL(thing, context, !isContextless)
+
+	if err == util.UrlThingOutsideContextError {
+		fmt.Println("Use the --context-less switch to force editing Things outside any context:", err)
+		return
+	} else if err != nil {
+		fmt.Println("There was an error.\n", err)
+		return
+	}
 
 	if editor == "" {
 		editor, _ = os.LookupEnv("EDITOR")
@@ -36,10 +43,9 @@ func EditThing(editor string, thing string, context string, hasContext bool) {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
-	err := cmd.Run()
-
+	err = cmd.Run()
 	if err != nil {
-		fmt.Println("an error occurred.\n", err)
+		fmt.Println("An error occurred.\n", err)
 	}
 }
 
@@ -62,8 +68,9 @@ Things.`,
 		editor := viper.GetString("editor")
 
 		viper.BindPFlag("context-less", cmd.PersistentFlags().Lookup("context-less"))
+		isContextless := viper.GetBool("context-less")
 
-		EditThing(editor, thing, context, !hasContext)
+		EditThing(editor, thing, context, isContextless)
 	},
 }
 
