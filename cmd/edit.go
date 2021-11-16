@@ -22,7 +22,7 @@ import (
 	"gitlab.com/zwischenloesung/natem/util"
 )
 
-func EditThing(context string, thing string, editor string) {
+func EditThing(editor string, thing string, context string, hasContext bool) {
 	fmt.Println("EditThing(", context, ",", thing, ",", editor, "", ") called")
 
 	filePath, _ := util.GetThingPathURL(thing, context, true)
@@ -61,7 +61,9 @@ Things.`,
 		viper.BindPFlag("editor", cmd.PersistentFlags().Lookup("editor"))
 		editor := viper.GetString("editor")
 
-		EditThing(context, thing, editor)
+		viper.BindPFlag("context-less", cmd.PersistentFlags().Lookup("context-less"))
+
+		EditThing(editor, thing, context, !hasContext)
 	},
 }
 
@@ -77,6 +79,7 @@ func init() {
 	editCmd.PersistentFlags().StringP("thing", "t", "", "summarize the info for this thing")
 	editCmd.MarkPersistentFlagRequired("thing")
 	editCmd.PersistentFlags().String("editor", "", "specify the editor of choice (default: Environment Variable $EDITOR)")
+	editCmd.PersistentFlags().BoolP("context-less", "C", false, "edit a thing outside of any context")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
