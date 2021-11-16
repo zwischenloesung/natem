@@ -14,7 +14,7 @@
     Start[tsunki] --> Context[--context context_folder]
     Context --> Init[init] --> InitDesc[Initialize a new context folder and register it for the user]
     Context --> Validate[validate] --> ValidateThing[--thing thing] --> ValidateSchema[optional: --schema schema] --> ValidateDesc[Validate a tsunki-yaml file against its schema]
-    Context --> Create[create] --> NoContext[--no-context] --> ThingCreate[--thing thing] --> ThingCreateDesc[Create a new thing - w/ / w/o context]
+    Context --> Create[create] --> HasContext[--context-less] --> ThingCreate[--thing thing] --> ThingCreateDesc[Create a new thing - w/ / w/o context]
     Context --> Edit[edit]
     Edit --> ThingEdit[--thing thing] --> ThingEditDesc[Edit the thing specified with your favorite editor]
     Context --> Rm[remove] --> ThingRm[--thing thing] --> ThingRmDesc[Remove a thing from the knowledge base]

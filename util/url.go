@@ -46,12 +46,12 @@ func isSupportedThingURLScheme(schemeString string) (bool, bool) {
       args
 		thingURL		the string to be parsed
 		contextURL		a string with the context information
-		isInContext		bool, whether to consider the context mandatory
+		hasContext		bool, whether to consider the context mandatory
 	  returns
 		ThingURL        pointer to a ThingURL containing the locator info
 		error			status of the ThingURL
 */
-func ParseThingURL(thingURI string, contextURI string, isInsideContext bool) (*ThingURL, error) {
+func ParseThingURL(thingURI string, contextURI string, hasContext bool) (*ThingURL, error) {
 	tu, err := url.Parse(thingURI)
 	if err != nil {
 		return nil, err
@@ -70,7 +70,7 @@ func ParseThingURL(thingURI string, contextURI string, isInsideContext bool) (*T
 
 	if tu.Path[0] != byte('/') {
 		tu.Path = cu.Path + "/" + tu.Path
-	} else if isInsideContext && !strings.HasPrefix(tu.Path, cu.Path) {
+	} else if hasContext && !strings.HasPrefix(tu.Path, cu.Path) {
 		return &ThingURL{tu, cu.Path, false}, errors.New("Thing and context URLs do not match.\n")
 	}
 
@@ -95,8 +95,8 @@ func ParseThingURL(thingURI string, contextURI string, isInsideContext bool) (*T
 }
 
 // Just get the path of the file back
-func GetThingPathURL(u string, context string, isInContext bool) (string, error) {
-	uri, err := ParseThingURL(u, context, isInContext)
+func GetThingPathURL(u string, context string, hasContext bool) (string, error) {
+	uri, err := ParseThingURL(u, context, hasContext)
 	if uri.Scheme != SupportedThingURLSchemesRW {
 		err = errors.New("This path is not local, scheme must be 'file'.\n")
 	}
