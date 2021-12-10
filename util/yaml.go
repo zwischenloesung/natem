@@ -131,12 +131,18 @@ func ParseThingFromFile(fileName string) Thing {
 	return ParseThing(yamlContent)
 }
 
-func SerializeThing(theThing Thing) []byte {
+func SerializeThing(theThing *Thing) ([]byte, error) {
+
+	// Make sure every Thing always has its UUID set
+	if theThing.Id == "" {
+		theThing.Id = uuid.New().String()
+	}
 
 	resultBytes, err := yaml.Marshal(theThing)
+	/// Unnused ATM
+	//	if err != nil {
+	//		return resultBytes, err
+	//	}
 
-	if err != nil {
-		log.Fatal("Error serizlizing the Thing.\n", err)
-	}
-	return resultBytes
+	return resultBytes, err
 }

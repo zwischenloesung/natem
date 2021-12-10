@@ -83,8 +83,16 @@ func TestSerializeThing(t *testing.T) {
 
 	a := NewThing()
 	a.Name = "example"
-	b := SerializeThing(*a)
-	if !strings.Contains(string(b), "name:") {
+	a.Id = ""
+	b, e := SerializeThing(a)
+	//t.Log(string(b))
+	if e != nil {
 		t.Fatal("Serializing Thing failed.")
+	}
+	if strings.Contains(string(b), "id: \"\"") {
+		t.Fatal("Incorrectly serialized Thing.")
+	}
+	if !strings.Contains(string(b), "name: example") {
+		t.Fatal("Incorrectly serialized Thing.")
 	}
 }
