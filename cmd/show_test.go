@@ -50,17 +50,28 @@ func TestExecuteShowHelp(t *testing.T) {
 
 // Test if all expected options are there
 func TestExecuteShowOptions(t *testing.T) {
-	// TODO
 	rootCmd.SetArgs([]string{"show"})
 	err := rootCmd.Execute()
 	if err != nil {
-		t.Fatal("the show command is expected to fail as the required -t is missing")
+		t.Fatal("The show command does not exist.\n", err)
 	}
 	a := bytes.NewBufferString("")
+	b := bytes.NewBufferString("")
 	rootCmd.SetOut(a)
-	rootCmd.SetArgs([]string{"show", "-t", "foo"})
-	err = rootCmd.Execute()
+	rootCmd.SetArgs([]string{"show"})
+	rootCmd.Execute()
+	aOut, err := ioutil.ReadAll(a)
 	if err != nil {
-		t.Fatal("show command is expected to fail as the required -t is missing")
+		t.Fatal(err)
+	}
+	rootCmd.SetOut(b)
+	rootCmd.SetArgs([]string{"show", "-t", "foo"})
+	rootCmd.Execute()
+	bOut, err := ioutil.ReadAll(a)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(aOut) == string(bOut) {
+		t.Fatal("The show command should have failed as the required -t was missing in one call.")
 	}
 }

@@ -50,10 +50,28 @@ func TestExecuteEditHelp(t *testing.T) {
 
 // Test if all expected options are there
 func TestExecuteEditOptions(t *testing.T) {
-	// TODO
 	rootCmd.SetArgs([]string{"edit"})
 	err := rootCmd.Execute()
 	if err != nil {
-		t.Fatal("the show command is expected to fail as the required -t is missing")
+		t.Fatal("The edit command does not exist.\n", err)
+	}
+	a := bytes.NewBufferString("")
+	b := bytes.NewBufferString("")
+	rootCmd.SetOut(a)
+	rootCmd.SetArgs([]string{"edit"})
+	rootCmd.Execute()
+	aOut, err := ioutil.ReadAll(a)
+	if err != nil {
+		t.Fatal(err)
+	}
+	rootCmd.SetOut(b)
+	rootCmd.SetArgs([]string{"edit", "-t", "foo"})
+	rootCmd.Execute()
+	bOut, err := ioutil.ReadAll(a)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(aOut) == string(bOut) {
+		t.Fatal("The edit command should have failed as the required -t was missing in one call.")
 	}
 }
