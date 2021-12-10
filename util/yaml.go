@@ -146,3 +146,14 @@ func SerializeThing(theThing *Thing) ([]byte, error) {
 
 	return resultBytes, err
 }
+
+func SerializeThingToFile(theThing *Thing, fileName string) error {
+
+	thingBytes, err := SerializeThing(theThing)
+
+	if err != nil {
+		return err
+	}
+
+	return ioutil.WriteFile(fileName, thingBytes, 0644)
+}

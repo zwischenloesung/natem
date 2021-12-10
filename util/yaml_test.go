@@ -14,6 +14,8 @@ Copyright © 2021 Michael Lustenberger <mic@inofix.ch>
 package util
 
 import (
+	"io/ioutil"
+	"os"
 	"strings"
 	"testing"
 )
@@ -94,5 +96,23 @@ func TestSerializeThing(t *testing.T) {
 	}
 	if !strings.Contains(string(b), "name: example") {
 		t.Fatal("Incorrectly serialized Thing.")
+	}
+}
+
+func TestSerializeThingToFile(t *testing.T) {
+
+	a := ParseThingFromFile("testing/example.yml")
+	f, err := ioutil.TempFile("testing", "natem")
+	defer os.Remove(f.Name())
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = SerializeThingToFile(&a, f.Name())
+	if err != nil {
+		t.Fatal(err)
+	}
+	b := ParseThingFromFile(f.Name())
+	if a.Id != b.Id {
+		t.Fatal("The Ids did not match.")
 	}
 }
