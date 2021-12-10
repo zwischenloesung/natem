@@ -26,6 +26,14 @@ func TestThing(t *testing.T) {
 	}
 }
 
+func TestNewThing(t *testing.T) {
+
+	a := NewThing()
+	if a.Id == "" {
+		t.Fatal("Failed to set the UUID for the new Thing.")
+	}
+}
+
 func TestValidateThing(t *testing.T) {
 
 	d := "{ \"_version\": \"0.1\" }"
@@ -66,6 +74,6 @@ func TestParseThingFromtFile(t *testing.T) {
 
 	a := ParseThingFromFile("testing/example.yml")
 	if a.Name != "example" {
-		t.Fatal("parsing YAML from file did not work as expected")
+		t.Fatal("Parsing YAML from file did not work as expected.")
 	}
 }
