@@ -14,6 +14,7 @@ Copyright © 2021 Michael Lustenberger <mic@inofix.ch>
 package util
 
 import (
+	"strings"
 	"testing"
 )
 
@@ -75,5 +76,15 @@ func TestParseThingFromtFile(t *testing.T) {
 	a := ParseThingFromFile("testing/example.yml")
 	if a.Name != "example" {
 		t.Fatal("Parsing YAML from file did not work as expected.")
+	}
+}
+
+func TestSerializeThing(t *testing.T) {
+
+	a := NewThing()
+	a.Name = "example"
+	b := SerializeThing(*a)
+	if !strings.Contains(string(b), "name:") {
+		t.Fatal("Serializing Thing failed.")
 	}
 }

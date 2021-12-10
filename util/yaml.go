@@ -130,3 +130,13 @@ func ParseThingFromFile(fileName string) Thing {
 
 	return ParseThing(yamlContent)
 }
+
+func SerializeThing(theThing Thing) []byte {
+
+	resultBytes, err := yaml.Marshal(theThing)
+
+	if err != nil {
+		log.Fatal("Error serizlizing the Thing.\n", err)
+	}
+	return resultBytes
+}
