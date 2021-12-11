@@ -13,8 +13,8 @@ Copyright © 2021 Michael Lustenberger <mic@inofix.ch>
 package util
 
 import (
-	"io/ioutil"
 	"log"
+	"os"
 
 	"github.com/ghodss/yaml"
 	"github.com/google/uuid"
@@ -123,7 +123,7 @@ func ParseThing(yamlContent []byte) Thing {
 
 func ParseThingFromFile(fileName string) Thing {
 
-	yamlContent, err := ioutil.ReadFile(fileName)
+	yamlContent, err := os.ReadFile(fileName)
 	if err != nil {
 		log.Fatal("Error reading JSON/YAML file.\n", err)
 	}
@@ -155,5 +155,5 @@ func SerializeThingToFile(theThing *Thing, fileName string) error {
 		return err
 	}
 
-	return ioutil.WriteFile(fileName, thingBytes, 0644)
+	return os.WriteFile(fileName, thingBytes, 0644)
 }

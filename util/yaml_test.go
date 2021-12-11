@@ -14,7 +14,6 @@ Copyright © 2021 Michael Lustenberger <mic@inofix.ch>
 package util
 
 import (
-	"io/ioutil"
 	"os"
 	"strings"
 	"testing"
@@ -102,7 +101,7 @@ func TestSerializeThing(t *testing.T) {
 func TestSerializeThingToFile(t *testing.T) {
 
 	a := ParseThingFromFile("testing/example.yml")
-	f, err := ioutil.TempFile("testing", "natem")
+	f, err := os.CreateTemp("testing", "natem")
 	defer os.Remove(f.Name())
 	if err != nil {
 		t.Fatal(err)
