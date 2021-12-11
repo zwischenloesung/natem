@@ -35,7 +35,7 @@ func CreateThing(thingPath string, contextPath string, isContextless bool) {
 // createCmd represents the create command
 var createCmd = &cobra.Command{
 	Use:   "create",
-	Short: "Create a Thing",
+	Short: "Create a new Thing",
 	Long: `Create a new Thing in the knowledge base. A Thing contains
 all the information about and points to an abstract or concrete thing.`,
 	Run: func(cmd *cobra.Command, args []string) {
