@@ -92,18 +92,18 @@ func TestParseThingURL(t *testing.T) {
 	}
 }
 
-func TestGetThingPathURL(t *testing.T) {
+func TestGetThingURLPath(t *testing.T) {
 	a := "testing/example.yml"
 	b := true
 	p := "/home/foo"
-	d, e := GetThingPathURL(a, p, b)
+	d, e := GetThingURLPath(a, p, b)
 	if e != nil || d != p+"/"+a {
 		t.Fatalf("parsing the URI (file) did not work as expected, result is: %s", d)
 	}
 	t.Log("Now failing successfully (Thing inside Context)")
 	a = "/testing/example.yml"
 	p = "/home/foo"
-	d, e = GetThingPathURL(a, p, b)
+	d, e = GetThingURLPath(a, p, b)
 	if e != nil {
 		t.Logf("Expected error was: %s.\n", e)
 	} else {
@@ -112,7 +112,7 @@ func TestGetThingPathURL(t *testing.T) {
 	t.Log("Now failing successfully (remote Things are not allowed)")
 	a = "testing/example.yml"
 	p = "https://example.org/home/foo"
-	d, e = GetThingPathURL(a, p, b)
+	d, e = GetThingURLPath(a, p, b)
 	if e != nil {
 		t.Logf("Expected error was: %s.\n", e)
 	} else {

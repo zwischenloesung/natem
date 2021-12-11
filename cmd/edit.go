@@ -24,7 +24,7 @@ import (
 
 func EditThing(editor string, thing string, context string, isContextless bool) {
 
-	filePath, err := util.GetThingPathURL(thing, context, !isContextless)
+	filePath, err := util.GetThingURLPath(thing, context, !isContextless)
 
 	if err == util.UrlThingOutsideContextError {
 		fmt.Println("Use the --context-less switch to force editing Things outside any context:", err)
