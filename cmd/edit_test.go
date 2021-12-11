@@ -15,7 +15,7 @@ package cmd
 
 import (
 	"bytes"
-	"io/ioutil"
+	"io"
 	"testing"
 
 	"github.com/spf13/cobra"
@@ -32,14 +32,14 @@ func TestExecuteEditHelp(t *testing.T) {
 	rootCmd.SetOut(a)
 	rootCmd.SetArgs([]string{"help", "edit"})
 	rootCmd.Execute()
-	aOut, err := ioutil.ReadAll(a)
+	aOut, err := io.ReadAll(a)
 	if err != nil {
 		t.Fatal(err)
 	}
 	rootCmd.SetOut(b)
 	rootCmd.SetArgs([]string{"edit", "--help"})
 	rootCmd.Execute()
-	bOut, err := ioutil.ReadAll(b)
+	bOut, err := io.ReadAll(b)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -60,14 +60,14 @@ func TestExecuteEditOptions(t *testing.T) {
 	rootCmd.SetOut(a)
 	rootCmd.SetArgs([]string{"edit"})
 	rootCmd.Execute()
-	aOut, err := ioutil.ReadAll(a)
+	aOut, err := io.ReadAll(a)
 	if err != nil {
 		t.Fatal(err)
 	}
 	rootCmd.SetOut(b)
 	rootCmd.SetArgs([]string{"edit", "-t", "foo"})
 	rootCmd.Execute()
-	bOut, err := ioutil.ReadAll(a)
+	bOut, err := io.ReadAll(a)
 	if err != nil {
 		t.Fatal(err)
 	}
