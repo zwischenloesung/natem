@@ -14,9 +14,13 @@ Copyright © 2021 Michael Lustenberger <mic@inofix.ch>
 package util
 
 import (
+	"math/rand"
 	"os"
+	"path/filepath"
+	"strconv"
 	"strings"
 	"testing"
+	"time"
 )
 
 // Make sure the basic structure is available
@@ -86,7 +90,6 @@ func TestSerializeThing(t *testing.T) {
 	a.Name = "example"
 	a.Id = ""
 	b, e := SerializeThing(a)
-	//t.Log(string(b))
 	if e != nil {
 		t.Fatal("Serializing Thing failed.")
 	}
@@ -114,4 +117,33 @@ func TestSerializeThingToFile(t *testing.T) {
 	if a.Id != b.Id {
 		t.Fatal("The Ids did not match.")
 	}
+}
+
+func TestWriteThingFile(t *testing.T) {
+
+	a := ParseThingFromFile("testing/example.yml")
+	b, e := os.Getwd()
+	if e != nil {
+		t.Fatalf("Could not get current working directory: %s.\n", e)
+	}
+	rand.Seed(int64(time.Now().Nanosecond()))
+	c := strconv.Itoa(rand.Intn(900000) + 100000)
+	d := filepath.Join(b, "testing", "_thing_test_"+c)
+	p, f, e := WriteThingFile(&a, d, b, true, true)
+	if e != nil {
+		t.Fatalf("Failed to create file: %s.\n", e)
+	} else {
+		t.Logf("Created this file: %s, in: %s.\n", f, p)
+	}
+	p, f, e = WriteThingFile(&a, d, b, true, false)
+	if e == nil {
+		t.Fatal("This time the file creation should have failed...\n")
+	} else {
+		t.Log("Successfully faild to create an already existing file.")
+	}
+	p, f, e = WriteThingFile(&a, d, b, true, true)
+	if e != nil {
+		t.Fatal("This time it should have worked though...\n")
+	}
+	os.Remove(d)
 }

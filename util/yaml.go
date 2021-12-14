@@ -13,8 +13,10 @@ Copyright © 2021 Michael Lustenberger <mic@inofix.ch>
 package util
 
 import (
+	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 
 	"github.com/ghodss/yaml"
 	"github.com/google/uuid"
@@ -150,10 +152,37 @@ func SerializeThing(theThing *Thing) ([]byte, error) {
 func SerializeThingToFile(theThing *Thing, fileName string) error {
 
 	thingBytes, err := SerializeThing(theThing)
-
 	if err != nil {
 		return err
 	}
 
 	return os.WriteFile(fileName, thingBytes, 0644)
 }
+
+func WriteThingFile(theThing *Thing, url string, context string, hasContext bool, overwrite bool) (string, string, error) {
+
+	path, err := GetThingURLPath(url, context, hasContext)
+	if err != nil {
+		return path, "", err
+	}
+
+	if !overwrite {
+		_, err = os.Stat(path)
+		if !os.IsNotExist(err) {
+			return path, "", fmt.Errorf("Not overwriting: %s.\n%s", path, err)
+		}
+	}
+	dir, file := filepath.Split(path)
+	dh, err := os.Stat(dir)
+	if os.IsNotExist(err) {
+		err = os.MkdirAll(dir, 0755)
+		if err != nil {
+			return dir, file, err
+		}
+	} else if !dh.IsDir() {
+		return dir, file, fmt.Errorf("Existing but not a dir: %s.\n%s", path, err)
+	}
+	return dir, file, SerializeThingToFile(theThing, path)
+}
+
+func CreateThingFile() {}
