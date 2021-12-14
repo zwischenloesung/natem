@@ -147,3 +147,22 @@ func TestWriteThingFile(t *testing.T) {
 	}
 	os.Remove(d)
 }
+
+func TestCreateThingFile(t *testing.T) {
+
+	b, e := os.Getwd()
+	if e != nil {
+		t.Fatalf("Could not get current working directory: %s.\n", e)
+	}
+	rand.Seed(int64(time.Now().Nanosecond()))
+	c := strconv.Itoa(rand.Intn(900000) + 100000)
+	d := filepath.Join(b, "testing", "_thing_test_"+c)
+	a, e := CreateThingFile(d, b, false)
+	if e != nil {
+		t.Fatalf("Failed to create a brand new Thing file: %s.\n", e)
+	}
+	if a.Name != "" {
+		t.Fatal("The name was not empty..")
+	}
+	os.Remove(d)
+}
