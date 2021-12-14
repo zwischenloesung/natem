@@ -20,13 +20,9 @@ import (
 	"gitlab.com/zwischenloesung/natem/util"
 )
 
-func CreateThing(thingPath string, contextPath string, isContextless bool) {
+func CreateThing(url string, context string, hasContext bool) {
 
-	url, err := util.ParseThingURL(thingPath, contextPath, isContextless)
-	if err != nil {
-		log.Fatal("Could not parse the URL of the Thing path provided by '--thing'.\n", err)
-	}
-	util.SerializeThingToFile(util.NewThing(), url.Path)
+	_, err := util.CreateThingFile(url, context, hasContext)
 	if err != nil {
 		log.Fatal("Could not create and serialize a new Thing to a file.\n", err)
 	}
