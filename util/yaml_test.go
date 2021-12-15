@@ -90,7 +90,10 @@ func TestParseThing(t *testing.T) {
 
 	a := "---\nname: 'example'\n"
 	b := []byte(a)
-	c := ParseThing(b)
+	c, e := ParseThing(b)
+	if e != nil {
+		t.Fatalf("Error parsing the Thing: %s.\n", e)
+	}
 	if c.Name != "example" {
 		t.Fatal("the YAML parser did not work as expected")
 	}
@@ -98,7 +101,10 @@ func TestParseThing(t *testing.T) {
 
 func TestParseThingFromtFile(t *testing.T) {
 
-	a := ParseThingFromFile("testing/example.yml")
+	a, e := ParseThingFromFile("testing/example.yml")
+	if e != nil {
+		t.Fatalf("Error parsing the Thing from file: %s.\n", e)
+	}
 	if a.Name != "example" {
 		t.Fatal("Parsing YAML from file did not work as expected.")
 	}
@@ -123,7 +129,7 @@ func TestSerializeThing(t *testing.T) {
 
 func TestSerializeThingToFile(t *testing.T) {
 
-	a := ParseThingFromFile("testing/example.yml")
+	a, _ := ParseThingFromFile("testing/example.yml")
 	f, err := os.CreateTemp("testing", "natem")
 	defer os.Remove(f.Name())
 	if err != nil {
@@ -133,7 +139,7 @@ func TestSerializeThingToFile(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	b := ParseThingFromFile(f.Name())
+	b, _ := ParseThingFromFile(f.Name())
 	if a.Id != b.Id {
 		t.Fatal("The Ids did not match.")
 	}
@@ -141,7 +147,7 @@ func TestSerializeThingToFile(t *testing.T) {
 
 func TestWriteThingFile(t *testing.T) {
 
-	a := ParseThingFromFile("testing/example.yml")
+	a, _ := ParseThingFromFile("testing/example.yml")
 	b, e := os.Getwd()
 	if e != nil {
 		t.Fatalf("Could not get current working directory: %s.\n", e)

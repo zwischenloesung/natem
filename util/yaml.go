@@ -111,23 +111,19 @@ func ValidateThing(schemaBytes []byte, contentBytes []byte) (bool, error) {
 	return ValidateJSONThing(JSONSchemaBytes, JSONContentBytes)
 }
 
-func ParseThing(yamlContent []byte) Thing {
+func ParseThing(yamlContent []byte) (Thing, error) {
 
 	var thing Thing
 	err := yaml.Unmarshal(yamlContent, &thing)
-	if err != nil {
-		log.Fatal("Error parsing JSON/YAML from file.\n", err)
-	}
-	return thing
+	return thing, err
 }
 
-func ParseThingFromFile(fileName string) Thing {
+func ParseThingFromFile(fileName string) (Thing, error) {
 
 	yamlContent, err := os.ReadFile(fileName)
 	if err != nil {
-		log.Fatal("Error reading JSON/YAML file.\n", err)
+		return *NewThing(), err
 	}
-
 	return ParseThing(yamlContent)
 }
 

@@ -13,10 +13,11 @@ Copyright © 2021 Michael Lustenberger <mic@inofix.ch>
 package cmd
 
 import (
-	"fmt"
+	"log"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"gitlab.com/zwischenloesung/natem/util"
 )
 
 // validateCmd represents the validate command
@@ -59,6 +60,14 @@ func init() {
 	// validateCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
-func ValidateThing(context string, thing string, schema string) {
-	fmt.Println("util.ValidateThingFromFile(", context, ",", thing, ",", schema, ") called")
+func ValidateThing(contextPath string, thingPath string, schemaPath string) {
+	r, e := util.ValidateThing([]byte(schemaPath), []byte(thingPath))
+	if e != nil {
+		log.Fatalf("Could not validate the Thing due to this error: %s.\n", e)
+	}
+	if r {
+		log.Printf("The document was validated successfully against the schema.\n")
+	} else {
+		log.Printf("The document was validated successfully against the schema.\n")
+	}
 }

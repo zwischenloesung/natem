@@ -14,6 +14,7 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -100,7 +101,10 @@ func ShowCategories(context string, thing string) {
 
 func ShowParameters(context string, thing string) {
 	fmt.Println("util.ShowParameters(", context, ",", thing, ") called")
-	theThing := util.ParseThingFromFile(thing)
+	theThing, e := util.ParseThingFromFile(thing)
+	if e != nil {
+		log.Fatalf("Could not parse Thing from file: %s.\n", e)
+	}
 	fmt.Println(theThing)
 }
 
