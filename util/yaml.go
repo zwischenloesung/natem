@@ -75,39 +75,37 @@ func NewThing() *Thing {
 	return t
 }
 
-func ValidateJSONThing(schemaBytes []byte, contentBytes []byte) bool {
+func ValidateJSONThing(schemaBytes []byte, contentBytes []byte) (bool, error) {
 	schemaLoader := gojsonschema.NewStringLoader(string(schemaBytes))
 	contentLoader := gojsonschema.NewStringLoader(string(contentBytes))
 
 	result, err := gojsonschema.Validate(schemaLoader, contentLoader)
 	if err != nil {
-		log.Fatal("Error validating the document:\n", err)
-		return false
+		return false, fmt.Errorf("Error validating the document: %s\n", err)
 	}
 
 	if result.Valid() {
-		return true
+		return true, nil
 	} else {
 		log.Print("Invalid document:\n")
 		for _, e := range result.Errors() {
-			//			fmt.Printf("- %s\n", err)
 			log.Printf("- %s\n", e)
 		}
-		return false
+		return false, nil
 	}
 }
 
 // We do only accept JSON compatible YAML anyway. TSENTSAK-YAML is defined to
 // be an object/map and has only strings as keys.
-func ValidateThing(schemaBytes []byte, contentBytes []byte) bool {
+func ValidateThing(schemaBytes []byte, contentBytes []byte) (bool, error) {
 
 	JSONSchemaBytes, err := yaml.YAMLToJSON(schemaBytes)
 	if err != nil {
-		log.Fatal("Parsing the YAML schema failed:", err)
+		return false, fmt.Errorf("Parsing the YAML schema failed: %s.\n", err)
 	}
 	JSONContentBytes, err := yaml.YAMLToJSON(contentBytes)
 	if err != nil {
-		log.Fatal("Parsing the YAML document failed:", err)
+		return false, fmt.Errorf("Parsing the YAML thing failed: %s.\n", err)
 	}
 
 	return ValidateJSONThing(JSONSchemaBytes, JSONContentBytes)

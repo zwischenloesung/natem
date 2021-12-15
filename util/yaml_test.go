@@ -46,19 +46,28 @@ func TestValidateThing(t *testing.T) {
 	data := []byte(d)
 	s := "{ \"type\": \"object\", \"properties\": { \"_version\": { \"type\": \"string\" } } }"
 	sc := []byte(s)
-	r := ValidateJSONThing(sc, data)
+	r, e := ValidateJSONThing(sc, data)
+	if e != nil {
+		t.Fatalf("Got an error validating a Thing: %s.\n", e)
+	}
 	if !r {
 		t.Fatal("this (JSON) should have validated successfully...")
 	}
 	// This time via the YAML parser..
-	r = ValidateThing(sc, data)
+	r, e = ValidateThing(sc, data)
+	if e != nil {
+		t.Fatalf("Got an error validating a Thing: %s.\n", e)
+	}
 	if !r {
 		t.Fatal("this (JSON) should have validated successfully...")
 	}
 	s = "{ \"type\": \"object\", \"properties\": { \"_version\": { \"type\": \"array\" } } }"
 	sc = []byte(s)
 	t.Log("Now failing successfully (wrong type):")
-	r = ValidateJSONThing(sc, data)
+	r, e = ValidateJSONThing(sc, data)
+	if e != nil {
+		t.Fatalf("Got an error validating a Thing: %s.\n", e)
+	}
 	if r {
 		t.Fatal("this should not have validated...")
 	} else {
@@ -68,7 +77,11 @@ func TestValidateThing(t *testing.T) {
 	data = []byte(d)
 	s = "---\ntype: \"object\"\nproperties:\n  _version:\n    type: \"string\""
 	sc = []byte(s)
-	if !ValidateThing(sc, data) {
+	r, e = ValidateThing(sc, data)
+	if e != nil {
+		t.Fatalf("Got an error validating a Thing: %s.\n", e)
+	}
+	if !r {
 		t.Fatal("this (YAML) should have validated successfully...")
 	}
 }
