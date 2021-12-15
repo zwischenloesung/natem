@@ -99,7 +99,7 @@ func ValidateJSONThing(schemaBytes []byte, contentBytes []byte) bool {
 
 // We do only accept JSON compatible YAML anyway. TSENTSAK-YAML is defined to
 // be an object/map and has only strings as keys.
-func ValidateYAMLThing(schemaBytes []byte, contentBytes []byte) bool {
+func ValidateThing(schemaBytes []byte, contentBytes []byte) bool {
 
 	JSONSchemaBytes, err := yaml.YAMLToJSON(schemaBytes)
 	if err != nil {
