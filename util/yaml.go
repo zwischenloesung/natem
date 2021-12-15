@@ -13,6 +13,9 @@ Copyright © 2021 Michael Lustenberger <mic@inofix.ch>
 package util
 
 import (
+	"bufio"
+	"bytes"
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -87,6 +90,7 @@ func ValidateJSONThing(schemaBytes []byte, contentBytes []byte) (bool, error) {
 	if result.Valid() {
 		return true, nil
 	} else {
+		//TODO proper error handling
 		log.Print("Invalid document:\n")
 		for _, e := range result.Errors() {
 			log.Printf("- %s\n", e)
@@ -111,6 +115,40 @@ func ValidateThing(schemaBytes []byte, contentBytes []byte) (bool, error) {
 	return ValidateJSONThing(JSONSchemaBytes, JSONContentBytes)
 }
 
+// Currently we only allow nice and small files with max one document inside..
+func ReadYAMLDocumentFromFile(fileName string) ([]byte, error) {
+
+	var contentBytes [][]byte
+	startDocument := false
+
+	fh, err := os.Open(fileName)
+	if err != nil {
+		return []byte(""), err
+	}
+	defer fh.Close()
+	scanner := bufio.NewScanner(fh)
+	for scanner.Scan() {
+		l := []byte(scanner.Text())
+		b := false
+		if len(l) > 2 && bytes.Equal([]byte("---"), l[0:3]) {
+			b = true
+		}
+		if startDocument {
+			if b {
+				break
+			}
+			contentBytes = append(contentBytes, l)
+		} else if b {
+			startDocument = true
+		}
+	}
+	err = scanner.Err()
+	if err == nil && len(contentBytes) < 1 {
+		err = errors.New("Unable to parse sensible data from file.")
+	}
+	return bytes.Join(contentBytes, []byte("\n")), err
+}
+
 func ParseThing(yamlContent []byte) (Thing, error) {
 
 	var thing Thing
@@ -120,7 +158,7 @@ func ParseThing(yamlContent []byte) (Thing, error) {
 
 func ParseThingFromFile(fileName string) (Thing, error) {
 
-	yamlContent, err := os.ReadFile(fileName)
+	yamlContent, err := ReadYAMLDocumentFromFile(fileName)
 	if err != nil {
 		return *NewThing(), err
 	}
@@ -149,8 +187,9 @@ func SerializeThingToFile(theThing *Thing, fileName string) error {
 	if err != nil {
 		return err
 	}
-
-	return os.WriteFile(fileName, thingBytes, 0644)
+	tbs := [][]byte{[]byte("---"), thingBytes}
+	ntbs := bytes.Join(tbs, []byte("\n"))
+	return os.WriteFile(fileName, ntbs, 0644)
 }
 
 func WriteThingFile(theThing *Thing, url string, context string, hasContext bool, overwrite bool) (string, string, error) {

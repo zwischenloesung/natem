@@ -139,7 +139,10 @@ func TestSerializeThingToFile(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	b, _ := ParseThingFromFile(f.Name())
+	b, err := ParseThingFromFile(f.Name())
+	if err != nil {
+		t.Fatal(err)
+	}
 	if a.Id != b.Id {
 		t.Fatal("The Ids did not match.")
 	}
