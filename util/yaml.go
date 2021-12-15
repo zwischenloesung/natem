@@ -185,7 +185,7 @@ func WriteThingFile(theThing *Thing, url string, context string, hasContext bool
 	return dir, file, SerializeThingToFile(theThing, path)
 }
 
-func CreateThingFile(url string, context string, hasContext bool) (*Thing, error) {
+func CreateNewThingFile(url string, context string, hasContext bool) (*Thing, error) {
 
 	t := NewThing()
 	_, _, e := WriteThingFile(t, url, context, hasContext, false)

@@ -22,7 +22,7 @@ import (
 
 func CreateThing(url string, context string, hasContext bool) {
 
-	_, err := util.CreateThingFile(url, context, hasContext)
+	_, err := util.CreateNewThingFile(url, context, hasContext)
 	if err != nil {
 		log.Fatal("Could not create and serialize a new Thing to a file.\n", err)
 	}

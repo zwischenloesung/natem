@@ -148,7 +148,7 @@ func TestWriteThingFile(t *testing.T) {
 	os.Remove(d)
 }
 
-func TestCreateThingFile(t *testing.T) {
+func TestCreateNewThingFile(t *testing.T) {
 
 	b, e := os.Getwd()
 	if e != nil {
@@ -157,7 +157,7 @@ func TestCreateThingFile(t *testing.T) {
 	rand.Seed(int64(time.Now().Nanosecond()))
 	c := strconv.Itoa(rand.Intn(900000) + 100000)
 	d := filepath.Join(b, "testing", "_thing_test_"+c)
-	a, e := CreateThingFile(d, b, false)
+	a, e := CreateNewThingFile(d, b, false)
 	if e != nil {
 		t.Fatalf("Failed to create a brand new Thing file: %s.\n", e)
 	}
