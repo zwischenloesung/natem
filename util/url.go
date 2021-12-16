@@ -24,7 +24,7 @@ type ThingURL struct {
 	RW          bool
 }
 
-var UrlThingOutsideContextError = errors.New("Thing and context URLs do not match.\n")
+var UrlThingOutsideContextError = errors.New("Target and context URLs do not match.\n")
 
 var SupportedThingURLSchemesRO = []string{"file", "http", "https"}
 var SupportedThingURLSchemesRW = string("file")

@@ -38,7 +38,10 @@ to the user.`,
 		viper.BindPFlag("schema", cmd.PersistentFlags().Lookup("schema"))
 		schema := viper.GetString("schema")
 
-		ValidateThing(context, thing, schema)
+		viper.BindPFlag("context-less", cmd.PersistentFlags().Lookup("context-less"))
+		hasContext := !viper.GetBool("context-less")
+
+		ValidateThing(context, hasContext, thing, schema)
 	},
 }
 
@@ -54,20 +57,37 @@ func init() {
 	validateCmd.PersistentFlags().StringP("thing", "t", "", "the thing to be validated, either in URL or short form")
 	validateCmd.MarkPersistentFlagRequired("thing")
 	validateCmd.PersistentFlags().StringP("schema", "s", "", "the schema to use for validation against, either in URL or short form")
-
+	validateCmd.PersistentFlags().BoolP("context-less", "C", false, "validate a thing outside of any context")
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// validateCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
-func ValidateThing(contextPath string, thingPath string, schemaPath string) {
-	r, e := util.ValidateThing([]byte(schemaPath), []byte(thingPath))
+func ValidateThing(contextPath string, hasContext bool, thingPath string, schemaPath string) {
+
+	schemaURLPath, e := util.GetThingURLPath(schemaPath, contextPath, false)
+	if e != nil {
+		log.Fatalf("Invalid schema path due to this error: %s.\n", e)
+	}
+	thingURLPath, e := util.GetThingURLPath(thingPath, contextPath, hasContext)
+	if e != nil {
+		log.Fatalf("Invalid Thing path due to this error: %s.\n", e)
+	}
+	schemaBytes, e := util.ReadYAMLDocumentFromFile(schemaURLPath)
+	if e != nil {
+		log.Fatalf("Invalid schema content due to this error: %s.\n", e)
+	}
+	thingBytes, e := util.ReadYAMLDocumentFromFile(thingURLPath)
+	if e != nil {
+		log.Fatalf("Invalid thing content due to this error: %s.\n", e)
+	}
+	r, e := util.ValidateThing(schemaBytes, thingBytes)
 	if e != nil {
 		log.Fatalf("Could not validate the Thing due to this error: %s.\n", e)
 	}
 	if r {
 		log.Printf("The document was validated successfully against the schema.\n")
 	} else {
-		log.Printf("The document was validated successfully against the schema.\n")
+		log.Fatalf("The document failed to validate against the schema.\n")
 	}
 }
