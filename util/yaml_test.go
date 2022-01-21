@@ -26,8 +26,8 @@ import (
 // Make sure the basic structure is available
 func TestThing(t *testing.T) {
 	var thing Thing
-	thing.Name = "foo"
-	if thing.Name != "foo" {
+	thing.Id.Name = "foo"
+	if thing.Id.Name != "foo" {
 		t.Fatal("the struct Thing did not work as expected")
 	}
 }
@@ -35,16 +35,16 @@ func TestThing(t *testing.T) {
 func TestNewThing(t *testing.T) {
 
 	a := NewThing()
-	if a.Id == "" {
+	if strings.HasPrefix("urn:uuid:", a.Id.Uuid) {
 		t.Fatal("Failed to set the UUID for the new Thing.")
 	}
 }
 
 func TestValidateThing(t *testing.T) {
 
-	d := "{ \"_version\": \"0.1\" }"
+	d := "{ \"id\": { \"version\": \"0.1\" } }"
 	data := []byte(d)
-	s := "{ \"type\": \"object\", \"properties\": { \"_version\": { \"type\": \"string\" } } }"
+	s := "{ \"type\": \"object\", \"properties\": { \"id\": { \"type\": \"object\" } } }"
 	sc := []byte(s)
 	r, e := ValidateJSONThing(sc, data)
 	if e != nil {
@@ -61,7 +61,7 @@ func TestValidateThing(t *testing.T) {
 	if !r {
 		t.Fatal("this (JSON) should have validated successfully...")
 	}
-	s = "{ \"type\": \"object\", \"properties\": { \"_version\": { \"type\": \"array\" } } }"
+	s = "{ \"type\": \"object\", \"properties\": { \"id\": { \"type\": \"array\" } } }"
 	sc = []byte(s)
 	t.Log("Now failing successfully (wrong type):")
 	r, e = ValidateJSONThing(sc, data)
@@ -73,9 +73,9 @@ func TestValidateThing(t *testing.T) {
 	} else {
 		t.Log("this document failed to validate (which is good).")
 	}
-	d = "---\n_version: \"0.1\""
+	d = "---\nid:\n  version: \"0.1\""
 	data = []byte(d)
-	s = "---\ntype: \"object\"\nproperties:\n  _version:\n    type: \"string\""
+	s = "---\ntype: \"object\"\nproperties:\n  id:\n    type: \"object\"\n    properties:\n      version:\n        type: \"string\""
 	sc = []byte(s)
 	r, e = ValidateThing(sc, data)
 	if e != nil {
@@ -88,13 +88,13 @@ func TestValidateThing(t *testing.T) {
 
 func TestParseThing(t *testing.T) {
 
-	a := "---\nname: 'example'\n"
+	a := "---\nid:\n  version: \"0.1\""
 	b := []byte(a)
 	c, e := ParseThing(b)
 	if e != nil {
 		t.Fatalf("Error parsing the Thing: %s.\n", e)
 	}
-	if c.Name != "example" {
+	if c.Id.Version != "0.1" {
 		t.Fatal("the YAML parser did not work as expected")
 	}
 }
@@ -105,7 +105,7 @@ func TestParseThingFromtFile(t *testing.T) {
 	if e != nil {
 		t.Fatalf("Error parsing the Thing from file: %s.\n", e)
 	}
-	if a.Name != "example" {
+	if a.Id.Name != "example" {
 		t.Fatal("Parsing YAML from file did not work as expected.")
 	}
 }
@@ -113,17 +113,22 @@ func TestParseThingFromtFile(t *testing.T) {
 func TestSerializeThing(t *testing.T) {
 
 	a := NewThing()
-	a.Name = "example"
-	a.Id = ""
+	t.Log("a address: ", &a)
+	a.Id.Name = "example"
+	a.Id.Uuid = ""
+	t.Log("a address: ", &a)
 	b, e := SerializeThing(a)
 	if e != nil {
 		t.Fatal("Serializing Thing failed.")
 	}
-	if strings.Contains(string(b), "id: \"\"") {
-		t.Fatal("Incorrectly serialized Thing.")
+	if !strings.Contains(string(b), "uuid:") {
+		t.Fatal("Incorrectly serialized Thing, no UUID.")
+	}
+	if strings.Contains(string(b), "uuid: \"\"") {
+		t.Fatal("Incorrectly serialized Thing, empty UUID.")
 	}
 	if !strings.Contains(string(b), "name: example") {
-		t.Fatal("Incorrectly serialized Thing.")
+		t.Fatal("Incorrectly serialized Thing, Name not set.")
 	}
 }
 
@@ -143,7 +148,7 @@ func TestSerializeThingToFile(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if a.Id != b.Id {
+	if a.Id.Uuid != b.Id.Uuid {
 		t.Fatal("The Ids did not match.")
 	}
 }
@@ -190,7 +195,7 @@ func TestCreateNewThingFile(t *testing.T) {
 	if e != nil {
 		t.Fatalf("Failed to create a brand new Thing file: %s.\n", e)
 	}
-	if a.Name != "" {
+	if a.Id.Name != "" {
 		t.Fatal("The name was not empty..")
 	}
 	os.Remove(d)

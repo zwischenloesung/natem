@@ -26,55 +26,72 @@ import (
 	"github.com/xeipuuv/gojsonschema"
 )
 
+type NameUrl struct {
+	Name string `json:"name"`
+	Url  string `json:"url"`
+}
+
+type NameUrlVersion struct {
+	*NameUrl
+	Version string `json:"version"`
+}
+
+type ThingTarget struct {
+	Url       string `json:"url"`
+	Checksum  string `json:"checksum"`
+	Tag       string `json"tag"`
+	Timestamp string `json:"timestamp"`
+	Geotag    string `json:"geotag"`
+}
+
+type ThingRelation struct {
+	BeA     []string         `json:"be_a"`
+	Have    []string         `json:"have"`
+	Know    []string         `json:"know"`
+	Show    []string         `json:"show"`
+	Include []NameUrlVersion `json:"include"`
+}
+
+type ThingId struct {
+	Uuid    string   `json:"uuid"`
+	Name    string   `json:"name"`
+	Version string   `json:"version"`
+	Url     []string `json:"url"`
+}
+
+type ThingAttribution struct {
+	Author    []NameUrl `json:"author"`
+	Reference []NameUrl `json:"reference"`
+}
+
+type ThingPermission struct {
+	// it definitely makes sense to define only one user, but who are
+	// we to decide / enforce it here?
+	Owner    []string `json:"owner"`
+	Editor   []string `json:"editor"`
+	Consumer []string `json:"consumer"`
+}
+
 type Thing struct {
-	Id      string   `json:"id"`   // URI:UUID
-	Name    string   `json:"name"` // URI:... (locally unique as path is added?)
-	Urls    []string `json:"urls"` // URI:Link
-	Targets struct {
-		Url     string `json:"url"` // URI:Link
-		Version string `json:"version"`
-	} `json:"targets"`
-	Behavior struct {
-		Is       []Thing `json:"is"`
-		IsLike   []Thing `json:"is_like"`
-		IsPartOf []Thing `json:"is_part_of"`
-		Seems    []Thing `json:"seems"`
-		IsNot    []Thing `json:"is_not"`
-		Has      []Thing `json:"has"`
-		//		hosts
-		//		inhabits
-		// 		is_located_at
-		BelongsTo []Thing `json:"belongs_to"`
-		//		execute
-	} `json:"behavior"`
-	Property struct {
-		Name        []struct{} `json:"name"`  // map of `<lang>: <value>`
-		Alias       []struct{} `json:"alias"` // map of `<lang>: <value>`
-		Description []struct{} `json:"name"`  // map of `<long/short>:: <lang>: <value>`
-		Tags        []string   `json:"tags"`
-	} `json:"property"`
-	Schema struct {
-		Name    string   `json:"name"`    // URI:tag?
-		Version string   `json:"version"` // URI:tag would be nice!
-		Urls    []string `json:"urls"`    //(auto-calculated?)
-		//Compatibility string `json:"compatibility"`
-	} `json:"_schema"`
-	Version      string   `json:"_version"`      // URI tag would be nice!
-	Dependencies []string `json:"_dependencies"` // URI:Link
-	Authors      []struct {
-		Name string `json:"name"`
-		Uri  string `json:"uri"` // URI:Address
-	} `json:"_authors"`
-	References []struct {
-		Name string `json:"name"`
-		Uri  string `json:"uri"` // URI:Address
-	} `json:"_references"`
+	// usually we have either "null" or "one" target, but there might
+	// exist exceptions..
+	Target      []ThingTarget    `json:"target"`
+	Relation    ThingRelation    `json:"relation"`
+	Parameter   interface{}      `json:"parameter"`
+	Id          ThingId          `json:"id"`
+	Schema      []NameUrlVersion `json:"schema"`
+	Attribution ThingAttribution `json:"attribution"`
+	Permission  ThingPermission  `json:"permission"`
+}
+
+func (t *Thing) GenId() {
+	t.Id.Uuid = "urn:uuid:" + uuid.New().String()
 }
 
 func NewThing() *Thing {
 
 	t := new(Thing)
-	t.Id = uuid.New().String()
+	t.GenId()
 	return t
 }
 
@@ -153,6 +170,9 @@ func ParseThing(yamlContent []byte) (Thing, error) {
 
 	var thing Thing
 	err := yaml.Unmarshal(yamlContent, &thing)
+	if thing.Id.Uuid == "" {
+		thing.GenId()
+	}
 	return thing, err
 }
 
@@ -167,16 +187,13 @@ func ParseThingFromFile(fileName string) (Thing, error) {
 
 func SerializeThing(theThing *Thing) ([]byte, error) {
 
+	fmt.Println("theThing address: ", &theThing)
 	// Make sure every Thing always has its UUID set
-	if theThing.Id == "" {
-		theThing.Id = uuid.New().String()
+	if theThing.Id.Uuid == "" {
+		theThing.GenId()
 	}
 
 	resultBytes, err := yaml.Marshal(theThing)
-	/// Unnused ATM
-	//	if err != nil {
-	//		return resultBytes, err
-	//	}
 
 	return resultBytes, err
 }
