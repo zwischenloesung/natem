@@ -187,7 +187,6 @@ func ParseThingFromFile(fileName string) (Thing, error) {
 
 func SerializeThing(theThing *Thing) ([]byte, error) {
 
-	fmt.Println("theThing address: ", &theThing)
 	// Make sure every Thing always has its UUID set
 	if theThing.Id.Uuid == "" {
 		theThing.GenId()
