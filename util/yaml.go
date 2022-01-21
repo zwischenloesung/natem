@@ -84,8 +84,8 @@ type Thing struct {
 	Permission  ThingPermission  `json:"permission"`
 }
 
-func (t *Thing) GenId() {
-	t.Id.Uuid = "urn:uuid:" + uuid.New().String()
+func (theThing *Thing) GenId() {
+	theThing.Id.Uuid = "urn:uuid:" + uuid.New().String()
 }
 
 func NewThing() *Thing {
@@ -168,12 +168,12 @@ func ReadYAMLDocumentFromFile(fileName string) ([]byte, error) {
 
 func ParseThing(yamlContent []byte) (Thing, error) {
 
-	var thing Thing
-	err := yaml.Unmarshal(yamlContent, &thing)
-	if thing.Id.Uuid == "" {
-		thing.GenId()
+	var t Thing
+	err := yaml.Unmarshal(yamlContent, &t)
+	if t.Id.Uuid == "" {
+		t.GenId()
 	}
-	return thing, err
+	return t, err
 }
 
 func ParseThingFromFile(fileName string) (Thing, error) {
