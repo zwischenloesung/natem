@@ -45,7 +45,7 @@ type ThingTarget struct {
 }
 
 type ThingRelation struct {
-	BeA     []string         `json:"be_a"`
+	Be      []string         `json:"be"`
 	Have    []string         `json:"have"`
 	Know    []string         `json:"know"`
 	Show    []string         `json:"show"`
@@ -81,11 +81,11 @@ type Thing struct {
 	Id          ThingId          `json:"id"`
 	Schema      []NameUrlVersion `json:"schema"`
 	Attribution ThingAttribution `json:"attribution"`
-	Permission  ThingPermission  `json:"permission"`
+	//	Permission  ThingPermission  `json:"permission"`
 }
 
-func (theThing *Thing) GenId() {
-	theThing.Id.Uuid = "urn:uuid:" + uuid.New().String()
+func (thing *Thing) GenId() {
+	thing.Id.Uuid = "urn:uuid:" + uuid.New().String()
 }
 
 func NewThing() *Thing {
@@ -94,6 +94,17 @@ func NewThing() *Thing {
 	t.GenId()
 	return t
 }
+
+// first do it - load all the complete Things into the slice
+//func FlattenHeritageOrder(thing Thing, theOrder []Thing) ([]Thing, error) {
+
+// the list consists of the following
+//   - walk up the directory tree and add all init.yml
+//     files from every directory creating Things called
+//     after the directory they live in - the name starts
+//     with the context dir.
+//   - every Thing has 'Thing' as most ancient parent
+//}
 
 func ValidateJSONThing(schemaBytes []byte, contentBytes []byte) (bool, error) {
 	schemaLoader := gojsonschema.NewStringLoader(string(schemaBytes))
@@ -185,21 +196,21 @@ func ParseThingFromFile(fileName string) (Thing, error) {
 	return ParseThing(yamlContent)
 }
 
-func SerializeThing(theThing *Thing) ([]byte, error) {
+func SerializeThing(thing *Thing) ([]byte, error) {
 
 	// Make sure every Thing always has its UUID set
-	if theThing.Id.Uuid == "" {
-		theThing.GenId()
+	if thing.Id.Uuid == "" {
+		thing.GenId()
 	}
 
-	resultBytes, err := yaml.Marshal(theThing)
+	resultBytes, err := yaml.Marshal(thing)
 
 	return resultBytes, err
 }
 
-func SerializeThingToFile(theThing *Thing, fileName string) error {
+func SerializeThingToFile(thing *Thing, fileName string) error {
 
-	thingBytes, err := SerializeThing(theThing)
+	thingBytes, err := SerializeThing(thing)
 	if err != nil {
 		return err
 	}
@@ -208,7 +219,7 @@ func SerializeThingToFile(theThing *Thing, fileName string) error {
 	return os.WriteFile(fileName, ntbs, 0644)
 }
 
-func WriteThingFile(theThing *Thing, url string, context string, hasContext bool, overwrite bool) (string, string, error) {
+func WriteThingFile(thing *Thing, url string, context string, hasContext bool, overwrite bool) (string, string, error) {
 
 	path, err := GetThingURLPath(url, context, hasContext)
 	if err != nil {
@@ -231,7 +242,7 @@ func WriteThingFile(theThing *Thing, url string, context string, hasContext bool
 	} else if !dh.IsDir() {
 		return dir, file, fmt.Errorf("Existing but not a dir: %s.\n%s", path, err)
 	}
-	return dir, file, SerializeThingToFile(theThing, path)
+	return dir, file, SerializeThingToFile(thing, path)
 }
 
 func CreateNewThingFile(url string, context string, hasContext bool) (*Thing, error) {
