@@ -57,8 +57,6 @@ func init() {
 	validateCmd.PersistentFlags().StringP("thing", "t", "", "the thing to be validated, either in URL or short form")
 	validateCmd.MarkPersistentFlagRequired("thing")
 	validateCmd.PersistentFlags().StringP("schema", "s", "", "the schema to use for validation against, either in URL or short form")
-	// TODO: FTTB mark as required
-	validateCmd.MarkPersistentFlagRequired("schema")
 	validateCmd.PersistentFlags().BoolP("context-less", "C", false, "validate a thing outside of any context")
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
@@ -67,6 +65,10 @@ func init() {
 
 func ValidateThing(contextPath string, hasContext bool, thingPath string, schemaPath string) {
 
+	if schemaPath == "" {
+		// TODO fail similar to the validateCmd.MarkPersistentFlagRequired("..")
+		log.Fatalf("Please provide a path to the schema file (as option or in configfile)")
+	}
 	schemaURLPath, e := util.GetThingURLPath(schemaPath, contextPath, false)
 	if e != nil {
 		log.Fatalf("Invalid schema path due to this error: %s.\n", e)
