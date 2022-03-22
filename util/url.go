@@ -104,10 +104,14 @@ func GetThingURLPath(u string, context string, hasContext bool) (string, error) 
 	uri, err := ParseThingURL(u, context, hasContext)
 	var path string
 	if uri == nil {
-		err = errors.New("This path was found empty.\n")
+		if err == nil {
+			err = errors.New("This path was found empty.\n")
+		}
 		path = ""
 	} else if err == nil && !uri.RW {
 		err = errors.New("This path is not local, scheme must be 'file'.\n")
+		path = uri.Path
+	} else {
 		path = uri.Path
 	}
 	return path, err

@@ -97,7 +97,9 @@ func TestGetThingURLPath(t *testing.T) {
 	b := true
 	p := "/home/foo"
 	d, e := GetThingURLPath(a, p, b)
-	if e != nil || d != p+"/"+a {
+	if e != nil {
+		t.Fatalf("parsing the URI (file) did not work as expected, got this error: %s", e)
+	} else if d != p+"/"+a {
 		t.Fatalf("parsing the URI (file) did not work as expected, result is: %s", d)
 	}
 	t.Log("Now failing successfully (Thing inside Context)")
