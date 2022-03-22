@@ -36,19 +36,47 @@ type NameUrlVersion struct {
 	Version string `json:"version"`
 }
 
+type DateGeo struct {
+	Date   string `json:"date"`
+	Geotag string `json:"geotag"`
+}
+
+type NameUrlVersionDateGeo struct {
+	*NameUrlVersion
+	*DateGeo
+	Target bool `json:"target"`
+}
+
 type ThingTarget struct {
-	Url       string `json:"url"`
-	Checksum  string `json:"checksum"`
-	Tag       string `json"tag"`
-	Timestamp string `json:"timestamp"`
-	Geotag    string `json:"geotag"`
+	Url      string `json:"url"`
+	Checksum string `json:"checksum"`
+	Tag      string `json"tag"`
+	Uuid     string `json"uuid"`
+	*DateGeo
 }
 
 type ThingRelation struct {
-	Be      []string         `json:"be"`
-	Have    []string         `json:"have"`
-	Know    []string         `json:"know"`
+	ThingUrl string `json:"thing_url"`
+	Version  string `json:"version"`
+	Priority string `json:"priority"`
+	Type     string `json:"type"`
+}
+
+type ThingAction struct {
+	Environment NameUrlVersion `json:"environment"`
+	Run         struct {
+		Command string   `json:"command"`
+		Option  []string `json:"option"`
+	} `json:"run"`
+	Dependency []NameUrlVersion `json:"dependency"`
+	Condition  []string         `json:"condition"`
+}
+
+type ThingBehavior struct {
+	Use     []string         `json:"use"`
+	Do      ThingAction      `json:"do"`
 	Show    []string         `json:"show"`
+	Extend  []NameUrlVersion `json:"extend"`
 	Include []NameUrlVersion `json:"include"`
 }
 
@@ -59,15 +87,16 @@ type ThingId struct {
 	Url     []string `json:"url"`
 }
 
-type ThingAttribution struct {
-	Author    []NameUrl `json:"author"`
-	Reference []NameUrl `json:"reference"`
+type ThingLegal struct {
+	Author    []NameUrlVersionDateGeo `json:"author"` //TODO or URI actually
+	Reference []NameUrlVersionDateGeo `json:"reference"`
+	License   []NameUrlVersionDateGeo `json:"license"`
 }
 
 type ThingPermission struct {
-	// it definitely makes sense to define only one user, but who are
+	// it definitely makes sense to define only one owner, but who are
 	// we to decide / enforce it here?
-	Owner    []string `json:"owner"`
+	Owner    string   `json:"owner"`
 	Editor   []string `json:"editor"`
 	Consumer []string `json:"consumer"`
 }
@@ -75,12 +104,13 @@ type ThingPermission struct {
 type Thing struct {
 	// usually we have either "null" or "one" target, but there might
 	// exist exceptions..
-	Target      []ThingTarget    `json:"target"`
-	Relation    ThingRelation    `json:"relation"`
-	Parameter   interface{}      `json:"parameter"`
-	Id          ThingId          `json:"id"`
-	Schema      []NameUrlVersion `json:"schema"`
-	Attribution ThingAttribution `json:"attribution"`
+	Target    []ThingTarget    `json:"target"`
+	Relation  []ThingRelation  `json:"relation"`
+	Id        ThingId          `json:"id"`
+	Schema    []NameUrlVersion `json:"schema"`
+	Behavior  ThingBehavior    `json:"behavior"`
+	Parameter interface{}      `json:"parameter"`
+	Legal     ThingLegal       `json:"legal"`
 	//	Permission  ThingPermission  `json:"permission"`
 }
 
