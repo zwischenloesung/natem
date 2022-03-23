@@ -93,13 +93,23 @@ func init() {
 
 func ShowBehavior(context string, theThing util.Thing, behavior string) {
 	fmt.Println("util.ShowBehavior(", context, ", theThing-struct, ", behavior, ") called")
-	m, _ := util.Marshal(theThing.Behavior)
+	var m []byte
+	if behavior == "*" {
+		m, _ = util.Marshal(theThing.Behavior)
+	} else {
+		m, _ = util.Marshal(theThing.Behavior[behavior])
+	}
 	fmt.Println(string(m))
 }
 
 func ShowParameter(context string, theThing util.Thing, parameter string) {
 	fmt.Println("util.ShowParameter(", context, ", theThing-struct, ", parameter, ") called")
-	m, _ := util.Marshal(theThing.Parameter)
+	var m []byte
+	if parameter == "*" {
+		m, _ = util.Marshal(theThing.Parameter)
+	} else {
+		m, _ = util.Marshal(theThing.Parameter[parameter])
+	}
 	fmt.Println(string(m))
 }
 

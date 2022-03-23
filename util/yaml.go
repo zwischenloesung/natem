@@ -72,14 +72,6 @@ type ThingAction struct {
 	Condition  []string         `json:"condition"`
 }
 
-type ThingBehavior struct {
-	Use     []string         `json:"use"`
-	Do      ThingAction      `json:"do"`
-	Show    []string         `json:"show"`
-	Extend  []NameUrlVersion `json:"extend"`
-	Include []NameUrlVersion `json:"include"`
-}
-
 type ThingId struct {
 	Uuid    string   `json:"uuid"`
 	Name    string   `json:"name"`
@@ -104,13 +96,14 @@ type ThingPermission struct {
 type Thing struct {
 	// usually we have either "null" or "one" target, but there might
 	// exist exceptions..
-	Target    []ThingTarget    `json:"target"`
-	Relation  []ThingRelation  `json:"relation"`
-	Id        ThingId          `json:"id"`
-	Schema    []NameUrlVersion `json:"schema"`
-	Behavior  ThingBehavior    `json:"behavior"`
-	Parameter interface{}      `json:"parameter"`
-	Legal     ThingLegal       `json:"legal"`
+	Target   []ThingTarget    `json:"target"`
+	Relation []ThingRelation  `json:"relation"`
+	Id       ThingId          `json:"id"`
+	Schema   []NameUrlVersion `json:"schema"`
+	//	Behavior  ThingBehavior    `json:"behavior"`
+	Behavior  map[string]interface{} `json:"behavior"`
+	Parameter map[string]interface{} `json:"parameter"`
+	Legal     ThingLegal             `json:"legal"`
 	//	Permission  ThingPermission  `json:"permission"`
 }
 
