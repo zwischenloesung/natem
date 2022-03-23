@@ -59,7 +59,7 @@ type ThingRelation struct {
 	ThingUrl string `json:"thing_url"`
 	Version  string `json:"version"`
 	Priority string `json:"priority"`
-	Type     string `json:"type"`
+	Kind     string `json:"kind"`
 }
 
 type ThingAction struct {
