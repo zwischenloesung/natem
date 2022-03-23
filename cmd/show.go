@@ -25,8 +25,7 @@ import (
 var showCmd = &cobra.Command{
 	Use:   "show",
 	Short: "Show View",
-	Long: `Show a visualization of the information stored in the knowledge base.
-The focus here lies on the content and behaviour of the things.`,
+	Long:  `Show a representation of the information stored in the knowledge base.`,
 	Run: func(cmd *cobra.Command, args []string) {
 
 		viper.BindPFlag("context", rootCmd.PersistentFlags().Lookup("context"))
@@ -35,32 +34,31 @@ The focus here lies on the content and behaviour of the things.`,
 		viper.BindPFlag("thing", cmd.PersistentFlags().Lookup("thing"))
 		thing := viper.GetString("thing")
 
-		viper.BindPFlag("actions", cmd.PersistentFlags().Lookup("actions"))
-		act_beh := viper.GetString("actions")
+		viper.BindPFlag("parameters", cmd.PersistentFlags().Lookup("parameters"))
+		par := viper.GetString("parameters")
 
 		viper.BindPFlag("behavior", cmd.PersistentFlags().Lookup("behavior"))
-		beh := viper.GetBool("behavior")
+		beh := viper.GetString("behavior")
 
 		viper.BindPFlag("categories", cmd.PersistentFlags().Lookup("categories"))
 		cat := viper.GetBool("categories")
 
 		viper.BindPFlag("relations", cmd.PersistentFlags().Lookup("relations"))
-		rel_beh := viper.GetString("relations")
+		rel := viper.GetString("relations")
 
-		if beh {
-			ShowBehavior(context, thing)
+		if beh != "" {
+			ShowBehavior(context, thing, beh)
 		}
 		if cat {
-			ShowCategories(context, thing)
+			ShowRelation(context, thing, "is")
 		}
-		if act_beh != "" {
-			ShowActions(context, thing, act_beh)
+		if rel != "" {
+			ShowRelation(context, thing, rel)
 		}
-		if rel_beh != "" {
-			ShowRelations(context, thing, rel_beh)
-		}
-		if !beh && !cat && act_beh == "" && rel_beh == "" {
-			ShowParameters(context, thing)
+		if par != "" {
+			ShowParameter(context, thing, par)
+		} else if beh == "" && !cat && rel == "" {
+			ShowParameter(context, thing, "*")
 		}
 	},
 }
@@ -76,31 +74,22 @@ func init() {
 
 	showCmd.PersistentFlags().StringP("thing", "t", "", "summarize the info for this thing")
 	showCmd.MarkPersistentFlagRequired("thing")
-	showCmd.PersistentFlags().BoolP("parameters", "P", true, "display the parameters set in 'content' (default)")
-	showCmd.PersistentFlags().StringP("actions", "A", "", "display the action defined in 'behaviour:<string>:action'")
-	showCmd.PersistentFlags().BoolP("behavior", "B", false, "display the capabilities set in 'behaviour:'")
-	showCmd.PersistentFlags().BoolP("categories", "C", false, "display the category hierarchies set in 'behaviour:is'")
-	showCmd.PersistentFlags().StringP("relations", "R", "", "display the relations set in 'behaviour:<string>:relations'")
+	showCmd.PersistentFlags().StringP("parameters", "P", "", "display the values set in 'parameters' (default)")
+	showCmd.PersistentFlags().StringP("behavior", "B", "", "display the capabilities set in 'behaviour:'")
+	showCmd.PersistentFlags().BoolP("categories", "C", false, "display the category hierarchies set in 'relation:is'")
+	showCmd.PersistentFlags().StringP("relations", "R", "", "display the relations set in 'relation'")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// showCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
-func ShowActions(context string, thing string, behavior string) {
-	fmt.Println("util.ShowActions(", context, ",", thing, ",", behavior, ") called")
+func ShowBehavior(context string, thing string, behavior string) {
+	fmt.Println("util.ShowBehavior(", context, ",", thing, ",", behavior, ") called")
 }
 
-func ShowBehavior(context string, thing string) {
-	fmt.Println("util.ShowBehavior(", context, ",", thing, ") called")
-}
-
-func ShowCategories(context string, thing string) {
-	fmt.Println("util.ShowCategories(", context, ",", thing, ") called")
-}
-
-func ShowParameters(context string, thing string) {
-	fmt.Println("util.ShowParameters(", context, ",", thing, ") called")
+func ShowParameter(context string, thing string, parameter string) {
+	fmt.Println("util.ShowParameter(", context, ",", thing, ",", parameter, ") called")
 	theThing, e := util.ParseThingFromFile(thing)
 	if e != nil {
 		log.Fatalf("Could not parse Thing from file: %s.\n", e)
@@ -108,6 +97,6 @@ func ShowParameters(context string, thing string) {
 	fmt.Println(theThing)
 }
 
-func ShowRelations(context string, thing string, behavior string) {
-	fmt.Println("util.ShowRelations(", context, ",", thing, ",", behavior, ") called")
+func ShowRelation(context string, thing string, relation string) {
+	fmt.Println("util.ShowRelation(", context, ",", thing, ",", relation, ") called")
 }
