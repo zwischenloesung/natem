@@ -46,19 +46,26 @@ var showCmd = &cobra.Command{
 		viper.BindPFlag("relations", cmd.PersistentFlags().Lookup("relations"))
 		rel := viper.GetString("relations")
 
+		if par == "" && beh == "" && !cat && rel == "" {
+			par = "*"
+		}
+
+		theThing, e := util.ParseThingFromFile(thing)
+		if e != nil {
+			log.Fatalf("Could not parse Thing from file: %s.\n", e)
+		}
+
 		if beh != "" {
-			ShowBehavior(context, thing, beh)
+			ShowBehavior(context, theThing, beh)
 		}
 		if cat {
-			ShowRelation(context, thing, "is")
+			ShowRelation(context, theThing, "is")
 		}
 		if rel != "" {
-			ShowRelation(context, thing, rel)
+			ShowRelation(context, theThing, rel)
 		}
 		if par != "" {
-			ShowParameter(context, thing, par)
-		} else if beh == "" && !cat && rel == "" {
-			ShowParameter(context, thing, "*")
+			ShowParameter(context, theThing, par)
 		}
 	},
 }
@@ -84,19 +91,17 @@ func init() {
 	// showCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
-func ShowBehavior(context string, thing string, behavior string) {
-	fmt.Println("util.ShowBehavior(", context, ",", thing, ",", behavior, ") called")
+func ShowBehavior(context string, theThing util.Thing, behavior string) {
+	fmt.Println("util.ShowBehavior(", context, ", theThing-struct, ", behavior, ") called")
+	fmt.Println(theThing.Behavior)
 }
 
-func ShowParameter(context string, thing string, parameter string) {
-	fmt.Println("util.ShowParameter(", context, ",", thing, ",", parameter, ") called")
-	theThing, e := util.ParseThingFromFile(thing)
-	if e != nil {
-		log.Fatalf("Could not parse Thing from file: %s.\n", e)
-	}
-	fmt.Println(theThing)
+func ShowParameter(context string, theThing util.Thing, parameter string) {
+	fmt.Println("util.ShowParameter(", context, ", theThing-struct, ", parameter, ") called")
+	fmt.Println(theThing.Parameter)
 }
 
-func ShowRelation(context string, thing string, relation string) {
-	fmt.Println("util.ShowRelation(", context, ",", thing, ",", relation, ") called")
+func ShowRelation(context string, theThing util.Thing, kind string) {
+	fmt.Println("util.ShowRelation(", context, ", theThing-struct, ", kind, ") called")
+	fmt.Println(theThing.Relation)
 }
