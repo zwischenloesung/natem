@@ -115,6 +115,18 @@ func ShowParameter(context string, theThing util.Thing, parameter string) {
 
 func ShowRelation(context string, theThing util.Thing, kind string) {
 	fmt.Println("util.ShowRelation(", context, ", theThing-struct, ", kind, ") called")
-	m, _ := util.Marshal(theThing.Relation)
+	var m []byte
+	if kind == "*" {
+		m, _ = util.Marshal(theThing.Relation)
+	} else {
+		var ls []util.ThingRelation
+		for i := range theThing.Relation {
+			l := theThing.Relation[i]
+			if (l.Kind == kind) || (kind == "is" && l.Kind == "") {
+				ls = append(ls, l)
+			}
+		}
+		m, _ = util.Marshal(ls)
+	}
 	fmt.Println(string(m))
 }
