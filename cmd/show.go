@@ -93,15 +93,18 @@ func init() {
 
 func ShowBehavior(context string, theThing util.Thing, behavior string) {
 	fmt.Println("util.ShowBehavior(", context, ", theThing-struct, ", behavior, ") called")
-	fmt.Println(theThing.Behavior)
+	m, _ := util.Marshal(theThing.Behavior)
+	fmt.Println(string(m))
 }
 
 func ShowParameter(context string, theThing util.Thing, parameter string) {
 	fmt.Println("util.ShowParameter(", context, ", theThing-struct, ", parameter, ") called")
-	fmt.Println(theThing.Parameter)
+	m, _ := util.Marshal(theThing.Parameter)
+	fmt.Println(string(m))
 }
 
 func ShowRelation(context string, theThing util.Thing, kind string) {
 	fmt.Println("util.ShowRelation(", context, ", theThing-struct, ", kind, ") called")
-	fmt.Println(theThing.Relation)
+	m, _ := util.Marshal(theThing.Relation)
+	fmt.Println(string(m))
 }

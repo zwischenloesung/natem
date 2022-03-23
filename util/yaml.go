@@ -226,6 +226,14 @@ func ParseThingFromFile(fileName string) (Thing, error) {
 	return ParseThing(yamlContent)
 }
 
+// Wrap and hide the external lib
+func Marshal(o interface{}) ([]byte, error) {
+
+	resultBytes, err := yaml.Marshal(o)
+
+	return resultBytes, err
+}
+
 func SerializeThing(thing *Thing) ([]byte, error) {
 
 	// Make sure every Thing always has its UUID set
@@ -233,7 +241,7 @@ func SerializeThing(thing *Thing) ([]byte, error) {
 		thing.GenId()
 	}
 
-	resultBytes, err := yaml.Marshal(thing)
+	resultBytes, err := Marshal(thing)
 
 	return resultBytes, err
 }
